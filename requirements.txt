@@ -1,0 +1,7 @@
+numpy
+pandas
+matplotlib
+langchain
+llama-cpp-python
+sentence-transformers
+chromadb
