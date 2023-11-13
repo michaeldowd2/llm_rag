@@ -1,0 +1,8 @@
+{
+    "model":"ggml-model-q4_0.gguf",
+    "no_links":2,
+    "no_factors":2,
+    "subjects": [
+        "nymex crude oil"
+    ]
+}

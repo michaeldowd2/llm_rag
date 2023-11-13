@@ -8,3 +8,6 @@ sentence-transformers
 chromadb
 matplotlib
 wakepy
+beautifulsoup4
+lxml
+//conda install -c conda-forge faiss-cpu
