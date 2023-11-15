@@ -1,3 +1,6 @@
+//conda install cudatoolkit=11.8
+//conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+//conda install -c conda-forge faiss-gpu
 numpy
 pandas
 matplotlib
@@ -6,8 +9,7 @@ llama-cpp-python
 transformers
 sentence-transformers
 chromadb
-matplotlib
 wakepy
 beautifulsoup4
 lxml
-//conda install -c conda-forge faiss-cpu
+httpx

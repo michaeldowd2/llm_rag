@@ -18,30 +18,6 @@ def Run(config_file, config):
     for subject in config['subjects']:
         Analyse(config_file, subject, config["no_factors"], config["no_links"], )
     return
-    llm = LoadModel(config)
-    question = "provide details of the book Innovator's dilemma in a json dictionary with keys: writer, year and description."
-    answer = llm(question)
-    logging.info(answer)
-
-def LoadModel(config):
-    if 'model' not in config:
-        logging.exception("model name not included in config")
-    model_path = os.path.join(os.getcwd(), 'models', config['model'])
-    if not os.path.exists(model_path):
-        logging.exception("model_path not exist: " + model_path)
-    try:
-        llm = LlamaCpp(
-            model_path=model_path,
-            temperature=0.0,
-            top_p=1,
-            n_ctx=6000,
-            verbose=True,
-        )
-    except Exception as e:
-        logging.exception(traceback.format_exc())
-        raise Exception(e)
-    logging.info("loaded model: " + model_path)
-    return llm
 
 def CreateFolders(config_file):
     logging.info("Creating folder structure")

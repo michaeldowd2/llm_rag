@@ -5,6 +5,9 @@ import numpy as np
 import time
 import urllib.request
 import traceback
+from transformers import LlamaForCausalLM, LlamaTokenizer
+from langchain.llms import LlamaCpp
+from langchain.chains import LLMChain
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain.document_loaders import BSHTMLLoader
@@ -27,6 +30,12 @@ Human: Use the following pieces of context to provide a concise answer to the qu
 </context>
 Question: {question}
 Assistant:"""
+TEMPLATE_AB = """
+<context>
+{context}
+</context>
+Question: Use the above context to give a JSON list of:{question}"""
+
 TEMPLATE_B = """
 Human: Use the following pieces of context to provide a concise answer to the question at the end. Answer in the form of a json dictionary with the keys: "effect", "confidence" and "explanation".Don't include lists, apostrophes or quotes in any part of the answer.
 <context>
@@ -44,10 +53,16 @@ Assistant:"""
 
 def Analyse(config_file, subject, no_factors, no_links):
     analysis_id = subject.replace(' ', '_')
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    query = 'what are the current ' + str(no_factors) + ' biggest factors that effect the price of ' + subject
-    SearchBingGetLinksAndSave(query, config_file, analysis_id, 'TL', no_links)
-    CreateVectorDB(embeddings, config_file, analysis_id)
+    bing_query = 'what are the current ' + str(no_factors) + ' biggest factors that effect the price of ' + subject
+    SearchBingGetLinksAndSave(bing_query, config_file, analysis_id, 'TL', no_links)
+    embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
+    vectorstore_faiss = CreateVectorDB(embeddings, config_file, analysis_id)
+    llm_query = 'what are the factors that effect the price of ' + subject
+    init_answer = LoadContextAndRunLLM(llm_query, TEMPLATE_A, vectorstore_faiss, config_file, analysis_id)
+    print(init_answer)
+    logging.info(init_answer)
+    return
+    
 
 def RequestURLAndSave(url, config_file, analysis_id, doc_prefix, doc_id):
     try:
@@ -110,5 +125,18 @@ def CreateVectorDB(embeddings, config_file, analysis_id):
         logging.exception(traceback.format_exc())
         raise Exception(e) 
     
+def LoadContextAndRunLLM(query, template, vectorstore_faiss, config_file, analysis_id):
+    prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
+    model_path = os.path.join(os.getcwd(), 'models', 'ggml-model-q4_0.gguf')
+    grammar_path = os.path.join(os.getcwd(), 'models', 'json_arr.gbnf')
+    llm = LlamaCpp(model_path=model_path, temperature=0.0, top_p=1, n_ctx=6000, verbose=True, grammar_path=grammar_path)
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type='stuff',
+        retriever=vectorstore_faiss.as_retriever(search_type="similarity", search_kwargs={"k":5}),
+        return_source_documents = False,
+        chain_type_kwargs = {"prompt":prompt}
+    )
+    return qa({"query": query})
 
 
