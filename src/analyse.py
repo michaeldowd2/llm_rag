@@ -22,41 +22,78 @@ from bs4 import BeautifulSoup
 import requests
 import lxml
 import logging
+from .queries import BINGQ_Factors
+from .queries import LLMQ_Factors
+from .queries import BINGQ_Effect
+from .queries import LLMQ_Effect
 
-TEMPLATE_A = """
-Answer the question at the end using the following context. Answer the question by showing a list summary.
-<context>
-{context}
-</context>
-Q: {question}? A:
-"""
-TEMPLATE_B = """
-Human: Use the following pieces of context to provide a concise answer to the question at the end. Answer in the form of a json dictionary with the keys: "effect", "confidence" and "explanation".Don't include lists, apostrophes or quotes in any part of the answer.
-<context>
-{context}
-</context>
-Question: {question}
-Assistant:"""
-TEMPLATE_C = """
-Human: Use the following pieces of context to provide a concise answer to the question at the end. Answer in the form of a json dictionary with the keys: "change", "confidence" and "explanation".Don't include lists, apostrophes or quotes in any part of the answer.
-<context>
-{context}
-</context>
-Question: {question}
-Assistant:"""
-
-def Analyse(config_file, subject, config):
+def Analyse(config_file, config, timestamp):
     no_factors= config['no_factors']
     no_links = config['no_links']
     model_props = config['model']
-    analysis_id = subject.replace(' ', '_')
-    query = 'what are the' + str(no_factors) + ' biggest factors that effect the price of ' + subject
-    SearchBingGetLinksAndSave(query, config_file, analysis_id, 'TL', no_links)
-    embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
-    vectorstore_faiss = CreateVectorDB(embeddings, config_file, analysis_id)
-    init_answer = LoadContextAndRunLLM(query, TEMPLATE_A, vectorstore_faiss, model_props, config_file, analysis_id)
-    logging.info(init_answer)
-    return init_answer
+    
+    res = {}
+    for subject in config['subjects']:
+        res[subject] = {'factors':{}} 
+    
+    for subject in config['subjects']:
+        analysis_id = subject.replace(' ', '_')
+        factors = FindFactors(subject, no_factors, no_links, model_props, config_file, analysis_id)
+        logging.info('factors returned')
+        logging.info(factors)
+        for factor in factors:
+            res[subject]['factors'][factor]={}
+        SaveRes(res, config_file, timestamp)
+
+        factorid = 0
+        for factor in factors:
+            factor_increase = AnalyseFactor(subject, factor, no_links, model_props, config_file, analysis_id, factorid)
+            if (factor_increase != None):
+                logging.info('factor: ' + str(factorid) + ' returned')
+                logging.info(factor_increase)
+                res[subject]['factors'][factor]['increase'] = factor_increase
+                SaveRes(res, config_file, timestamp)
+            factorid += 1
+
+def FindFactors(subject, no_factors, no_links, model_props, config_file, analysis_id):
+    bq = BINGQ_Factors(subject, no_factors)
+    q, t = LLMQ_Factors(subject, no_factors)
+    SearchBingGetLinksAndSave(bq, config_file, analysis_id, 'factors', no_links)
+    answer = LoadContextAndRunLLM(q, t, model_props, 'json_arr.gbnf', config_file, analysis_id, 'factors')
+    return ParseJSONResult(answer)
+
+def AnalyseFactor(subject, factor, no_links, model_props, config_file, analysis_id, factorid):
+    bq = BINGQ_Effect(subject, factor)
+    q, t = LLMQ_Effect(subject, factor)
+    SearchBingGetLinksAndSave(bq, config_file, analysis_id, 'factor'+str(factorid), no_links)
+    answer = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', config_file, analysis_id, 'factor'+str(factorid))
+    return ParseJSONResult(answer)
+
+def LoadModel(model_props, grammar):
+    model_path = os.path.join(os.getcwd(), 'models', model_props['name'])
+    grammar_path = os.path.join(os.getcwd(), 'models', grammar)
+    llm = LlamaCpp(model_path=model_path, 
+        temperature=0.0, 
+        top_p=1,
+        n_ctx=model_props['n_ctx'], 
+        seed = 42,
+        verbose=True, 
+        n_gpu_layers=model_props['n_gpu_layers'],
+        n_batch=model_props['n_batch'],
+        grammar_path=grammar_path
+    )
+    return llm
+
+def SaveRes(res, config_file, timestamp):
+    path = os.path.join(os.getcwd(),'output', config_file, 'data')
+    if not os.path.exists(path):
+        os.makedirs(path)
+        logging.info('created data output path at: ' + path)
+    fname = os.path.join(path, str(timestamp) + '.json')
+    with open(fname, "w", encoding="utf-8") as f:
+        json.dump(res, f, indent=4)
+        logging.info('saved result file to: ' + fname)
+
 
 def RequestURLAndSave(url, config_file, analysis_id, doc_prefix, doc_id):
     try:
@@ -67,11 +104,12 @@ def RequestURLAndSave(url, config_file, analysis_id, doc_prefix, doc_id):
         response = requests.get(url, headers = headers).text
         time.sleep(2)
         path = os.path.join(os.getcwd(),'output', config_file, 'html', analysis_id)
+        path = os.path.join(path, doc_prefix)
         if not os.path.exists(path):
             os.makedirs(path)
             logging.info('created html output path at: ' + path)
         
-        fname = os.path.join(path, doc_prefix + str(doc_id) + '.html')
+        fname = os.path.join(path, str(doc_id) + '.html')
         with open(fname, "w", encoding="utf-8") as f:
             f.write(str(response))
         logging.info('saved html file to: ' + fname)
@@ -101,10 +139,10 @@ def SearchBingGetLinksAndSave(query, config_file, analysis_id, doc_prefix, no_li
         logging.exception(traceback.format_exc())
         raise Exception(e) 
 
-def CreateVectorDB(embeddings, config_file, analysis_id):
+def CreateVectorDB(config_file, analysis_id, prefix):
     try:
         vector_db_path = os.path.join(os.getcwd(), 'output', config_file, 'html', analysis_id)
-        vector_db_path += '\\'
+        vector_db_path = os.path.join(vector_db_path, prefix) + '\\'
         logging.info('loading vector db at directory: ' + vector_db_path)
         loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8'})
         documents = loader.load()
@@ -112,6 +150,7 @@ def CreateVectorDB(embeddings, config_file, analysis_id):
         text_splitter = RecursiveCharacterTextSplitter(chunk_size = 750, chunk_overlap = 50)
         docs = text_splitter.split_documents(documents)
         logging.info('generating embeddings')
+        embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
         vectorstore_faiss = FAISS.from_documents(docs, embeddings)
         return vectorstore_faiss
     except Exception as e:
@@ -119,26 +158,29 @@ def CreateVectorDB(embeddings, config_file, analysis_id):
         logging.exception(traceback.format_exc())
         raise Exception(e) 
     
-def LoadContextAndRunLLM(query, template, vectorstore_faiss, model_props, config_file, analysis_id):
+def LoadContextAndRunLLM(query, template, model_props, grammar, config_file, analysis_id, prefix):
+    vectorstore_faiss = CreateVectorDB(config_file, analysis_id, prefix)
     prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
-    model_path = os.path.join(os.getcwd(), 'models', model_props['name'])
-    grammar_path = os.path.join(os.getcwd(), 'models', 'json_arr.gbnf')
-    llm = LlamaCpp(model_path=model_path, 
-        temperature=0.0, 
-        top_p=1,
-        n_ctx=model_props['n_ctx'], 
-        seed = 42,
-        verbose=True, 
-        n_gpu_layers=model_props['n_gpu_layers'],
-        n_batch=model_props['n_batch'],
-        grammar_path=grammar_path
-    )
+    model = LoadModel(model_props, grammar)
     qa = RetrievalQA.from_chain_type(
-        llm=llm,
+        llm=model,
         chain_type='stuff',
         retriever=vectorstore_faiss.as_retriever(search_type="similarity", search_kwargs={"k":5}),
         return_source_documents = False,
         chain_type_kwargs = {"prompt":prompt}
     )
-    return qa({"query": query})
+    res = qa({"query": query})
+    model, vectorstore_faiss = None, None
+    time.sleep(10)
+    return res
 
+def ParseJSONResult(answer):
+    try:
+        res = json.loads(answer['result'])
+        return res
+    except Exception as e:
+        logging.exception('failed to parse json: ')
+        logging.exception(answer['result'])
+        logging.exception(e)
+        return None
+        raise Exception(e)

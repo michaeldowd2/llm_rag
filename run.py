@@ -1,6 +1,7 @@
 import numpy
 import pandas as pd
 import os
+import json
 from transformers import LlamaForCausalLM, LlamaTokenizer
 from langchain.llms import LlamaCpp
 from langchain.chains import LLMChain
@@ -13,11 +14,6 @@ import datetime
 from wakepy import keep
 import json
 from src.analyse import Analyse
-
-def Run(config_file, config):
-    for subject in config['subjects']:
-        Analyse(config_file, subject, config)
-    return
 
 def CreateFolders(config_file):
     logging.info("Creating folder structure")
@@ -46,5 +42,4 @@ if __name__ == "__main__":
         
         CreateFolders(config_file)
         config = ReadConfigFile(config_file)
-        
-        Run(config_file, config)
+        Analyse(config_file, config, timestamp)
