@@ -24,18 +24,12 @@ import lxml
 import logging
 
 TEMPLATE_A = """
-Human: Use the following pieces of context to provide a concise answer to the question at the end. Answer in the form of a json list with minimal word length.
+Answer the question at the end using the following context. Answer the question by showing a list summary.
 <context>
 {context}
 </context>
-Question: {question}
-Assistant:"""
-TEMPLATE_AB = """
-<context>
-{context}
-</context>
-Question: Use the above context to give a JSON list of:{question}"""
-
+Q: {question}? A:
+"""
 TEMPLATE_B = """
 Human: Use the following pieces of context to provide a concise answer to the question at the end. Answer in the form of a json dictionary with the keys: "effect", "confidence" and "explanation".Don't include lists, apostrophes or quotes in any part of the answer.
 <context>
@@ -51,18 +45,18 @@ Human: Use the following pieces of context to provide a concise answer to the qu
 Question: {question}
 Assistant:"""
 
-def Analyse(config_file, subject, no_factors, no_links):
+def Analyse(config_file, subject, config):
+    no_factors= config['no_factors']
+    no_links = config['no_links']
+    model_props = config['model']
     analysis_id = subject.replace(' ', '_')
-    bing_query = 'what are the current ' + str(no_factors) + ' biggest factors that effect the price of ' + subject
-    SearchBingGetLinksAndSave(bing_query, config_file, analysis_id, 'TL', no_links)
+    query = 'what are the' + str(no_factors) + ' biggest factors that effect the price of ' + subject
+    SearchBingGetLinksAndSave(query, config_file, analysis_id, 'TL', no_links)
     embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
     vectorstore_faiss = CreateVectorDB(embeddings, config_file, analysis_id)
-    llm_query = 'what are the factors that effect the price of ' + subject
-    init_answer = LoadContextAndRunLLM(llm_query, TEMPLATE_A, vectorstore_faiss, config_file, analysis_id)
-    print(init_answer)
+    init_answer = LoadContextAndRunLLM(query, TEMPLATE_A, vectorstore_faiss, model_props, config_file, analysis_id)
     logging.info(init_answer)
-    return
-    
+    return init_answer
 
 def RequestURLAndSave(url, config_file, analysis_id, doc_prefix, doc_id):
     try:
@@ -112,10 +106,10 @@ def CreateVectorDB(embeddings, config_file, analysis_id):
         vector_db_path = os.path.join(os.getcwd(), 'output', config_file, 'html', analysis_id)
         vector_db_path += '\\'
         logging.info('loading vector db at directory: ' + vector_db_path)
-        loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader)
+        loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8'})
         documents = loader.load()
         logging.info('splitting documents')
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 100)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 750, chunk_overlap = 50)
         docs = text_splitter.split_documents(documents)
         logging.info('generating embeddings')
         vectorstore_faiss = FAISS.from_documents(docs, embeddings)
@@ -125,11 +119,20 @@ def CreateVectorDB(embeddings, config_file, analysis_id):
         logging.exception(traceback.format_exc())
         raise Exception(e) 
     
-def LoadContextAndRunLLM(query, template, vectorstore_faiss, config_file, analysis_id):
+def LoadContextAndRunLLM(query, template, vectorstore_faiss, model_props, config_file, analysis_id):
     prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
-    model_path = os.path.join(os.getcwd(), 'models', 'ggml-model-q4_0.gguf')
+    model_path = os.path.join(os.getcwd(), 'models', model_props['name'])
     grammar_path = os.path.join(os.getcwd(), 'models', 'json_arr.gbnf')
-    llm = LlamaCpp(model_path=model_path, temperature=0.0, top_p=1, n_ctx=6000, verbose=True, grammar_path=grammar_path)
+    llm = LlamaCpp(model_path=model_path, 
+        temperature=0.0, 
+        top_p=1,
+        n_ctx=model_props['n_ctx'], 
+        seed = 42,
+        verbose=True, 
+        n_gpu_layers=model_props['n_gpu_layers'],
+        n_batch=model_props['n_batch'],
+        grammar_path=grammar_path
+    )
     qa = RetrievalQA.from_chain_type(
         llm=llm,
         chain_type='stuff',
@@ -138,5 +141,4 @@ def LoadContextAndRunLLM(query, template, vectorstore_faiss, config_file, analys
         chain_type_kwargs = {"prompt":prompt}
     )
     return qa({"query": query})
-
 

@@ -1,8 +1,14 @@
 {
-    "model":"ggml-model-q4_0.gguf",
-    "no_links":2,
-    "no_factors":2,
+    "model": {
+        "name": "llama-2-13b-chat.Q8_0.gguf",
+        "n_gpu_layers":40,
+        "n_batch":1024,
+        "n_ctx":4096
+    },
+    "no_links":5,
+    "no_factors":5,
     "subjects": [
-        "nymex crude oil"
+        "nymex crude oil",
+        "ethereum"
     ]
 }

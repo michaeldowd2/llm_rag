@@ -16,7 +16,7 @@ from src.analyse import Analyse
 
 def Run(config_file, config):
     for subject in config['subjects']:
-        Analyse(config_file, subject, config["no_factors"], config["no_links"], )
+        Analyse(config_file, subject, config)
     return
 
 def CreateFolders(config_file):
