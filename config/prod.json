@@ -2,11 +2,11 @@
     "model": {
         "name": "ggml-model-q4_0.gguf",
         "n_gpu_layers":40,
-        "n_batch":512,
+        "n_batch":1024,
         "n_ctx":4096
     },
-    "no_links":3,
-    "no_factors":3,
+    "no_links":5,
+    "no_factors":5,
     "subjects": [
         "nymex crude oil",
         "ethereum"
