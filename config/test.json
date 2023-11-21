@@ -1,16 +1,14 @@
 {
-    "subjects": ["Nymex Crude Oil", "Henry Hub Natural Gas", "ethereum", "bitcoin", "S&P 500", "FTSE 100"],
-    "directions": ["Increase","Decrease"],
-    "no_links":5,
-    "no_factors":5,
+    "subjects": ["nymex crude oil","ethereum"],
+    "directions": ["increase"],
+    "no_links":2,
+    "no_factors":2,
     "queries":{
         "factor_store": "FactorStore_0",
         "factors_analysis": "FactorsAnalysis_0",
         "effect_store":"EffectStore_0",
         "effect_analysis": [
-            "EffectAnalysis_0",
-            "EffectAnalysis_1",
-            "EffectAnalysis_2"
+            "EffectAnalysis_0"
         ]
     },
     "model": {

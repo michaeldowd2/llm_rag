@@ -22,80 +22,106 @@ from bs4 import BeautifulSoup
 import requests
 import lxml
 import logging
-from .queries import Factors_Q0
-from .queries import Effect_Q0
-from .queries import Effect_Q1
-from .queries import Effect_Q2
+import inspect
+import src.queries as queries
 
 def Analyse(config_file, config, timestamp):
+
+    subjects = config['subjects']
+    directions = config['directions']
     no_factors= config['no_factors']
     no_links = config['no_links']
     model_props = config['model']
     
+    factor_store = config['queries']['factor_store']
+    factors_analysis = config['queries']['factors_analysis']
+    effect_store = config['queries']['effect_store']
+    effect_analyses = config['queries']['effect_analysis']
+    func_dict = dict(inspect.getmembers(queries, inspect.isfunction))
+    
     res = {}
     for subject in config['subjects']:
         res[subject] = {} # create dictionary for results
+        SaveRes(res, config_file, timestamp)
+        
         analysis_id = subject.replace(' ', '_')
-        for direction in ['increase', 'decrease']:
+        for direction in directions:
             res[subject][direction] = {} # create dictionary for results
-            factors = FindFactors(subject, Factors_Q0, direction, no_factors, no_links, model_props, config_file, analysis_id)
+            SaveRes(res, config_file, timestamp)
+            
+            prefix = direction + '_search'
+            # create vector store with bing search results for top n factors
+            vs = QueryBingAndCreateVectorStore(func_dict[factor_store], subject, '', direction, no_links, config_file, analysis_id, prefix)
+            # use llm query to extract the top n factors
+            factors = FindFactors(subject, func_dict[factors_analysis], direction, no_factors, no_links, vs, model_props, config_file, analysis_id)
             logging.info(factors)
             f_no = 0
             for factor in factors:
-                if isNotANumber(factor):
+                if isNotANumber(factor): # sometimes llama returns a straight up number in the above list, skip this
                     res[subject][direction][factor] = {} # create dictionary for results
-                    SaveRes(res, config_file, timestamp)
-                    q_no, bing_dl = 0, True
-                    for query in [Effect_Q0, Effect_Q1, Effect_Q2]: #loop through effect queries
-                        if q_no > 0:
-                            bing_dl = False
-                        q_name = str(query.__name__)
-                        prefix = direction + '_F' + str(f_no)
-                        effect = AnalyseFactor(subject, factor, query, direction, no_links, model_props, bing_dl, config_file, analysis_id, prefix)
-                        res[subject][direction][factor][q_name] = effect
+                    SaveRes(res, config_file, timestamp) 
+
+                    prefix = direction + '_analysis_' + str(f_no)
+                    # create vector store with one or more bing search queries
+                    vs = QueryBingAndCreateVectorStore(func_dict[effect_store], subject, factor, direction, no_links, config_file, analysis_id, prefix)
+                    for effect_analysis in effect_analyses: #analyse vector store with multiple llm queries
+                        # analyse factor using llm prompt - basically try and find if the factor is likely to result in a price change
+                        effect = AnalyseFactor(subject, factor, func_dict[effect_analysis], direction, no_links, vs, model_props, config_file, analysis_id, prefix)
+                        res[subject][direction][factor][effect_analysis] = effect
                         SaveRes(res, config_file, timestamp)
-                        q_no+=1
                     f_no += 1
 
-def FindFactors(subject, query, direction, no_factors, no_links, model_props, config_file, analysis_id):
-    bs, q, t = query()
-    bs = (Parameterise(b, subject, '', no_factors, direction) for b in bs)
+def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file, analysis_id):
+    q, t = query()
     q = Parameterise(q, subject, '', no_factors, direction) 
-    SearchBingGetLinksAndSave(bs, no_links, config_file, analysis_id, direction + '_factors')
-    answer = LoadContextAndRunLLM(q, t, model_props, 'json_arr.gbnf', config_file, analysis_id, direction + '_factors')
-    print('factor result')
-    print(answer)
+    answer = LoadContextAndRunLLM(q, t, model_props, 'json_arr.gbnf', vectorstore_faiss, config_file, analysis_id, direction + '_factors')
     return ParseJSONResult(answer)
 
-def AnalyseFactor(subject, factor, query, direction, no_links, model_props, bing_dl, config_file, analysis_id, prefix):
-    bs, q, t = query()
-    bs = (Parameterise(b, subject, factor, '', direction) for b in bs)
-    q = Parameterise(q, subject, factor, '', direction) 
-    if bing_dl:
-        SearchBingGetLinksAndSave(bs, no_links, config_file, analysis_id, prefix)
-    answer = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', config_file, analysis_id, prefix)
+def AnalyseFactor(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file, analysis_id, prefix):
+    q, t = query()
+    q = Parameterise(q, subject, factor, '', direction)
+    answer = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file, analysis_id, prefix)
     return answer['result']
 
-def Parameterise(inp, subject = '', factor = '', no_factors = '', direction = ''):
-    inp = inp.replace('{subject}', subject)
-    inp = inp.replace('{factor}', factor)
-    inp = inp.replace('{no_factors}', str(no_factors))
-    inp = inp.replace('{direction}', direction)
-    return inp
+def QueryBingAndCreateVectorStore(query, subject, factor, direction, no_links, config_file, analysis_id, prefix):
+    bs = query()
+    bs = (Parameterise(b, subject, factor, no_links, direction) for b in bs)
+    SearchBingGetLinksAndSave(bs, no_links, config_file, analysis_id, prefix)
+    vs =  CreateVectorDB(config_file, analysis_id, prefix)
+    return vs
 
-def isNotANumber(factor):
+def CreateVectorDB(config_file, analysis_id, prefix):
     try:
-        float(factor)
-        return False # not a valid factor if it can be converted to a float
-    except:
-        pass
-    try:
-        int(factor)
-        return False
-    except:
-        pass
-    return True
+        vector_db_path = os.path.join(os.getcwd(), 'output', config_file, 'html', analysis_id)
+        vector_db_path = os.path.join(vector_db_path, prefix) + '\\'
+        logging.info('loading vector db at directory: ' + vector_db_path)
+        loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8'})
+        documents = loader.load()
+        logging.info('splitting documents')
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 50)
+        docs = text_splitter.split_documents(documents)
+        logging.info('generating embeddings')
+        embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
+        vectorstore_faiss = FAISS.from_documents(docs, embeddings)
+        return vectorstore_faiss
+    except Exception as e:
+        logging.exception("error generating embeddings")
+        logging.exception(traceback.format_exc())
+        raise Exception(e) 
     
+def LoadContextAndRunLLM(query, template, model_props, grammar, vectorstore_faiss, config_file, analysis_id, prefix):
+    prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
+    model = LoadModel(model_props, grammar)
+    qa = RetrievalQA.from_chain_type(
+        llm=model,
+        chain_type='stuff',
+        retriever=vectorstore_faiss.as_retriever(search_type="similarity", search_kwargs={"k":5}),
+        return_source_documents = True,
+        chain_type_kwargs = {"prompt":prompt}
+    )
+    res = qa({"query": query})
+    return res
+
 def LoadModel(model_props, grammar):
     model_path = os.path.join(os.getcwd(), 'models', model_props['name'])
     grammar_path = os.path.join(os.getcwd(), 'models', grammar)
@@ -110,16 +136,6 @@ def LoadModel(model_props, grammar):
         grammar_path=grammar_path
     )
     return llm
-
-def SaveRes(res, config_file, timestamp):
-    path = os.path.join(os.getcwd(),'output', config_file, 'data')
-    if not os.path.exists(path):
-        os.makedirs(path)
-        logging.info('created data output path at: ' + path)
-    fname = os.path.join(path, str(timestamp) + '.json')
-    with open(fname, "w", encoding="utf-8") as f:
-        json.dump(res, f, indent=4)
-        logging.info('saved result file to: ' + fname)
 
 def RequestURLAndSave(url, save, config_file, analysis_id, doc_prefix, doc_id):
     try:
@@ -162,6 +178,7 @@ def SearchBingGetLinksAndSave(queries, no_links, config_file, analysis_id, doc_p
             links = links[:no_links]
             for link in links:
                 RequestURLAndSave(link, True, config_file, analysis_id, doc_prefix, doc_id)
+                time.sleep(0.143)
                 doc_id += 1
             logging.info('finished running and saving results for query')
     except Exception as e:
@@ -183,40 +200,12 @@ def BingToActualURL(url):
             return response
     return None
 
-def CreateVectorDB(config_file, analysis_id, prefix):
-    try:
-        vector_db_path = os.path.join(os.getcwd(), 'output', config_file, 'html', analysis_id)
-        vector_db_path = os.path.join(vector_db_path, prefix) + '\\'
-        logging.info('loading vector db at directory: ' + vector_db_path)
-        loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8'})
-        documents = loader.load()
-        logging.info('splitting documents')
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 50)
-        docs = text_splitter.split_documents(documents)
-        logging.info('generating embeddings')
-        embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
-        vectorstore_faiss = FAISS.from_documents(docs, embeddings)
-        return vectorstore_faiss
-    except Exception as e:
-        logging.exception("error generating embeddings")
-        logging.exception(traceback.format_exc())
-        raise Exception(e) 
-    
-def LoadContextAndRunLLM(query, template, model_props, grammar, config_file, analysis_id, prefix):
-    vectorstore_faiss = CreateVectorDB(config_file, analysis_id, prefix)
-    prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
-    model = LoadModel(model_props, grammar)
-    qa = RetrievalQA.from_chain_type(
-        llm=model,
-        chain_type='stuff',
-        retriever=vectorstore_faiss.as_retriever(search_type="similarity", search_kwargs={"k":5}),
-        return_source_documents = True,
-        chain_type_kwargs = {"prompt":prompt}
-    )
-    res = qa({"query": query})
-    model, vectorstore_faiss = None, None
-    time.sleep(10)
-    return res
+def Parameterise(inp, subject = '', factor = '', no_factors = '', direction = ''):
+    inp = inp.replace('{subject}', subject)
+    inp = inp.replace('{factor}', factor)
+    inp = inp.replace('{no_factors}', str(no_factors))
+    inp = inp.replace('{direction}', direction)
+    return inp
 
 def ParseJSONResult(answer):
     try:
@@ -228,3 +217,29 @@ def ParseJSONResult(answer):
         logging.exception(e)
         return None
         raise Exception(e)
+
+def isNotANumber(factor):
+    try:
+        float(factor)
+        return False # not a valid factor if it can be converted to a float
+    except:
+        pass
+    try:
+        int(factor)
+        return False
+    except:
+        pass
+    return True
+
+def SaveRes(res, config_file, timestamp):
+    path = os.path.join(os.getcwd(),'output', config_file, 'data')
+    if not os.path.exists(path):
+        os.makedirs(path)
+        logging.info('created data output path at: ' + path)
+    fname = os.path.join(path, str(timestamp) + '.json')
+    with open(fname, "w", encoding="utf-8") as f:
+        json.dump(res, f, indent=4)
+        logging.info('saved result file to: ' + fname)
+
+
+
