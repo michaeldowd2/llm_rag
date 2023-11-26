@@ -4,6 +4,18 @@
     "no_links":5,
     "no_factors":5,
     "queries":{
+        "price_store": "PriceStore_0",
+        "price_analysis": [
+            "PriceAnalysis_0",
+            "PriceAnalysis_1",
+            "PriceAnalysis_2"
+        ],
+        "sentiment_store": "SentimentStore_0",
+        "sentiment_analysis": [
+            "SentimentAnalysis_0",
+            "SentimentAnalysis_1",
+            "SentimentAnalysis_2"
+        ],
         "factor_store": "FactorStore_0",
         "factors_analysis": "FactorsAnalysis_0",
         "effect_store":"EffectStore_0",
@@ -14,9 +26,10 @@
         ]
     },
     "model": {
-        "name": "ggml-model-q4_0.gguf",
+        "name": "llama-2-13b-chat.Q8_0.gguf",
         "n_gpu_layers":40,
         "n_batch":1024,
-        "n_ctx":4096
+        "n_ctx":4096,
+        "k_docs": 10
     }
 }

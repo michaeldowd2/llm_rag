@@ -33,54 +33,71 @@ def Analyse(config_file, config, timestamp):
     no_links = config['no_links']
     model_props = config['model']
     
+    price_store = config['queries']['price_store']
+    price_analyses = config['queries']['price_analysis']
+
+    sentiment_store = config['queries']['sentiment_store']
+    sentiment_analyses = config['queries']['sentiment_analysis']
+
     factor_store = config['queries']['factor_store']
     factors_analysis = config['queries']['factors_analysis']
+
     effect_store = config['queries']['effect_store']
     effect_analyses = config['queries']['effect_analysis']
     func_dict = dict(inspect.getmembers(queries, inspect.isfunction))
     
     res = {}
     for subject in config['subjects']:
-        res[subject] = {} # create dictionary for results
+        analysis_id = subject.replace(' ', '_')
+        res[subject] = {'prices':{},'sentiments':{},'factors':{}} # create dictionary for results
         SaveRes(res, config_file, timestamp)
         
-        analysis_id = subject.replace(' ', '_')
+        #price search and extract
+        vs = QueryBingAndCreateVectorStore(func_dict[price_store], subject, '', '', no_links, config_file, analysis_id, 'price_search')
+        for price_analysis in price_analyses:
+            price = LLMAnalyse(subject, '', func_dict[price_analysis], '', no_links, vs, model_props, config_file)
+            res[subject]['prices'][price_analysis] = price
+            SaveRes(res, config_file, timestamp)
+
+        #sentiment search and extract
+        vs = QueryBingAndCreateVectorStore(func_dict[sentiment_store], subject, '', '', no_links, config_file, analysis_id, 'sentiment_search')
+        for sentiment_analysis in sentiment_analyses:
+            sentiment = LLMAnalyse(subject, '', func_dict[sentiment_analysis], '', no_links, vs, model_props, config_file)
+            res[subject]['sentiments'][sentiment_analysis] = sentiment
+            SaveRes(res, config_file, timestamp)
+
         for direction in directions:
-            res[subject][direction] = {} # create dictionary for results
+            res[subject]['factors'][direction] = {} # create dictionary for results
             SaveRes(res, config_file, timestamp)
             
-            prefix = direction + '_search'
-            # create vector store with bing search results for top n factors
-            vs = QueryBingAndCreateVectorStore(func_dict[factor_store], subject, '', direction, no_links, config_file, analysis_id, prefix)
-            # use llm query to extract the top n factors
-            factors = FindFactors(subject, func_dict[factors_analysis], direction, no_factors, no_links, vs, model_props, config_file, analysis_id)
-            logging.info(factors)
+            #factors search and extract
+            vs = QueryBingAndCreateVectorStore(func_dict[factor_store], subject, '', direction, no_links, config_file, analysis_id, direction + '_search')
+            factors = FindFactors(subject, func_dict[factors_analysis], direction, no_factors, no_links, vs, model_props, config_file)
+            
             f_no = 0
             for factor in factors:
                 if isNotANumber(factor): # sometimes llama returns a straight up number in the above list, skip this
-                    res[subject][direction][factor] = {} # create dictionary for results
+                    res[subject]['factors'][direction][factor] = {} # create dictionary for results
                     SaveRes(res, config_file, timestamp) 
 
-                    prefix = direction + '_analysis_' + str(f_no)
-                    # create vector store with one or more bing search queries
-                    vs = QueryBingAndCreateVectorStore(func_dict[effect_store], subject, factor, direction, no_links, config_file, analysis_id, prefix)
+                    #factor analysis
+                    vs = QueryBingAndCreateVectorStore(func_dict[effect_store], subject, factor, direction, no_links, config_file, analysis_id, direction + '_analysis_' + str(f_no))
                     for effect_analysis in effect_analyses: #analyse vector store with multiple llm queries
-                        # analyse factor using llm prompt - basically try and find if the factor is likely to result in a price change
-                        effect = AnalyseFactor(subject, factor, func_dict[effect_analysis], direction, no_links, vs, model_props, config_file, analysis_id, prefix)
-                        res[subject][direction][factor][effect_analysis] = effect
+                        effect = LLMAnalyse(subject, factor, func_dict[effect_analysis], direction, no_links, vs, model_props, config_file)
+                        res[subject]['factors'][direction][factor][effect_analysis] = effect
                         SaveRes(res, config_file, timestamp)
                     f_no += 1
 
-def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file, analysis_id):
+def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file):
     q, t = query()
     q = Parameterise(q, subject, '', no_factors, direction) 
-    answer = LoadContextAndRunLLM(q, t, model_props, 'json_arr.gbnf', vectorstore_faiss, config_file, analysis_id, direction + '_factors')
+    answer = LoadContextAndRunLLM(q, t, model_props, 'json_arr.gbnf', vectorstore_faiss, config_file)
     return ParseJSONResult(answer)
 
-def AnalyseFactor(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file, analysis_id, prefix):
+def LLMAnalyse(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file):
     q, t = query()
     q = Parameterise(q, subject, factor, '', direction)
-    answer = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file, analysis_id, prefix)
+    answer = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file)
     return answer['result']
 
 def QueryBingAndCreateVectorStore(query, subject, factor, direction, no_links, config_file, analysis_id, prefix):
@@ -109,17 +126,19 @@ def CreateVectorDB(config_file, analysis_id, prefix):
         logging.exception(traceback.format_exc())
         raise Exception(e) 
     
-def LoadContextAndRunLLM(query, template, model_props, grammar, vectorstore_faiss, config_file, analysis_id, prefix):
+def LoadContextAndRunLLM(query, template, model_props, grammar, vectorstore_faiss, config_file):
     prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
     model = LoadModel(model_props, grammar)
     qa = RetrievalQA.from_chain_type(
         llm=model,
         chain_type='stuff',
-        retriever=vectorstore_faiss.as_retriever(search_type="similarity", search_kwargs={"k":5}),
+        retriever=vectorstore_faiss.as_retriever(search_type="similarity", search_kwargs={"k":model_props['k_docs']}),
         return_source_documents = True,
         chain_type_kwargs = {"prompt":prompt}
     )
+    logging.info('running llm query: ' + query)
     res = qa({"query": query})
+    logging.info('llm query result: ' + str(res['result']))
     return res
 
 def LoadModel(model_props, grammar):
@@ -160,11 +179,10 @@ def RequestURLAndSave(url, save, config_file, analysis_id, doc_prefix, doc_id):
     except Exception as e:
         logging.exception("error querying url or saving result")
         logging.exception(traceback.format_exc())
-        raise Exception(e) 
 
 def SearchBingGetLinksAndSave(queries, no_links, config_file, analysis_id, doc_prefix):
     try:
-        doc_id = 0
+        doc_id, all_processed, failed_urls = 0, 0, 0
         for query in queries:
             logging.info('running bing search for query: ' + query)
             url = "https://www.bing.com/search?form=QBRE&q="+query.replace(' ', '+')
@@ -175,12 +193,20 @@ def SearchBingGetLinksAndSave(queries, no_links, config_file, analysis_id, doc_p
                 actURL = BingToActualURL(container['href']) # need to find the actual url
                 if actURL is not None:
                     links.append(actURL)
-            links = links[:no_links]
+            processed = 0
             for link in links:
-                RequestURLAndSave(link, True, config_file, analysis_id, doc_prefix, doc_id)
+                if processed >= no_links:
+                    break
+                try:
+                    RequestURLAndSave(link, True, config_file, analysis_id, doc_prefix, doc_id)
+                    all_processed += 1
+                    processed += 1
+                except Exception as e:
+                    # catch problems and allow to continue as some URLS are just bad
+                    failed_urls += 1
                 time.sleep(0.143)
                 doc_id += 1
-            logging.info('finished running and saving results for query')
+            logging.info('finished running and saving results for query, processed: ' + str(all_processed) + ', failed: ' + str(failed_urls))
     except Exception as e:
         logging.exception("error running bing search and save results")
         logging.exception(traceback.format_exc())
