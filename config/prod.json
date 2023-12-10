@@ -1,15 +1,9 @@
 {
-    "subjects": ["Nymex Crude Oil", "Henry Hub Natural Gas", "ethereum", "bitcoin", "S&P 500", "FTSE 100"],
+    "subjects": ["Crude Oil","Natural Gas","Ethereum","Bitcoin","S&P 500","FTSE 100","US Dollar","Euro","Pound Sterling","Japanese Yen","Chinese Yuan","Canadian Dollar","Australian Dollar","Swiss Franc","New Zealand Dollar"],
     "directions": ["Increase","Decrease"],
     "no_links":5,
     "no_factors":5,
     "queries":{
-        "price_store": "PriceStore_0",
-        "price_analysis": [
-            "PriceAnalysis_0",
-            "PriceAnalysis_1",
-            "PriceAnalysis_2"
-        ],
         "sentiment_store": "SentimentStore_0",
         "sentiment_analysis": [
             "SentimentAnalysis_0",
@@ -26,8 +20,8 @@
         ]
     },
     "model": {
-        "name": "llama-2-13b-chat.Q8_0.gguf",
-        "n_gpu_layers":40,
+        "name": "vicuna-33b.Q3_K_M.gguf",
+        "n_gpu_layers":50,
         "n_batch":1024,
         "n_ctx":4096,
         "k_docs": 10

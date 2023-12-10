@@ -33,9 +33,6 @@ def Analyse(config_file, config, timestamp):
     no_links = config['no_links']
     model_props = config['model']
     
-    price_store = config['queries']['price_store']
-    price_analyses = config['queries']['price_analysis']
-
     sentiment_store = config['queries']['sentiment_store']
     sentiment_analyses = config['queries']['sentiment_analysis']
 
@@ -49,16 +46,9 @@ def Analyse(config_file, config, timestamp):
     res = {}
     for subject in config['subjects']:
         analysis_id = subject.replace(' ', '_')
-        res[subject] = {'prices':{},'sentiments':{},'factors':{}} # create dictionary for results
+        res[subject] = {'sentiments':{},'factors':{}} # create dictionary for results
         SaveRes(res, config_file, timestamp)
         
-        #price search and extract
-        vs = QueryBingAndCreateVectorStore(func_dict[price_store], subject, '', '', no_links, config_file, analysis_id, 'price_search')
-        for price_analysis in price_analyses:
-            price = LLMAnalyse(subject, '', func_dict[price_analysis], '', no_links, vs, model_props, config_file)
-            res[subject]['prices'][price_analysis] = price
-            SaveRes(res, config_file, timestamp)
-
         #sentiment search and extract
         vs = QueryBingAndCreateVectorStore(func_dict[sentiment_store], subject, '', '', no_links, config_file, analysis_id, 'sentiment_search')
         for sentiment_analysis in sentiment_analyses:
@@ -91,8 +81,8 @@ def Analyse(config_file, config, timestamp):
 def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file):
     q, t = query()
     q = Parameterise(q, subject, '', no_factors, direction) 
-    answer = LoadContextAndRunLLM(q, t, model_props, 'json_arr.gbnf', vectorstore_faiss, config_file)
-    return ParseJSONResult(answer)
+    answer = LoadContextAndRunLLM(q, t, model_props, '', vectorstore_faiss, config_file)
+    return ParseStringToList(answer)
 
 def LLMAnalyse(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file):
     q, t = query()
@@ -115,7 +105,7 @@ def CreateVectorDB(config_file, analysis_id, prefix):
         loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8'})
         documents = loader.load()
         logging.info('splitting documents')
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 50)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 150)
         docs = text_splitter.split_documents(documents)
         logging.info('generating embeddings')
         embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
@@ -141,19 +131,31 @@ def LoadContextAndRunLLM(query, template, model_props, grammar, vectorstore_fais
     logging.info('llm query result: ' + str(res['result']))
     return res
 
-def LoadModel(model_props, grammar):
+def LoadModel(model_props, grammar = ''):
     model_path = os.path.join(os.getcwd(), 'models', model_props['name'])
-    grammar_path = os.path.join(os.getcwd(), 'models', grammar)
-    llm = LlamaCpp(model_path=model_path, 
-        temperature=0.0, 
-        top_p=1,
-        n_ctx=model_props['n_ctx'], 
-        seed = 42,
-        verbose=True, 
-        n_gpu_layers=model_props['n_gpu_layers'],
-        n_batch=model_props['n_batch'],
-        grammar_path=grammar_path
-    )
+    if grammar != '':
+        grammar_path = os.path.join(os.getcwd(), 'models', grammar)
+        llm = LlamaCpp(model_path=model_path, 
+            temperature=0.0, 
+            top_p=1,
+            n_ctx=model_props['n_ctx'], 
+            seed = 42,
+            verbose=True, 
+            n_gpu_layers=model_props['n_gpu_layers'],
+            n_batch=model_props['n_batch'],
+            grammar_path=grammar_path
+        )
+        return llm
+    else:
+        llm = LlamaCpp(model_path=model_path, 
+            temperature=0.0, 
+            top_p=1,
+            n_ctx=model_props['n_ctx'], 
+            seed = 42,
+            verbose=True, 
+            n_gpu_layers=model_props['n_gpu_layers'],
+            n_batch=model_props['n_batch']
+        )
     return llm
 
 def RequestURLAndSave(url, save, config_file, analysis_id, doc_prefix, doc_id):
@@ -256,6 +258,27 @@ def isNotANumber(factor):
     except:
         pass
     return True
+
+def ParseStringToList(answer):
+    res = answer['result'].replace('"','')
+    ls = res.split('\n')
+    ls2 = []
+    for it in ls:
+        if it != '':
+            it = it.lower()
+            it = it.replace('1.','').replace('2.','').replace('3.','').replace('4.','').replace('5.','')
+            it = it.replace('the first is ','').replace('the second is ','').replace('the third is ','').replace('the fourth is ','').replace('the fifth is ','')
+            if it != '':
+                ls2.append(it.strip())
+    if len(ls2) == 1: #
+        ls3 = ls2[0].split(',')
+        ls2 = []
+        for it in ls3:
+            ls2.append(it.strip())
+
+    for x in range(len(ls2)):
+        ls2[x] = ls2[x].replace(',','')
+    return ls2
 
 def SaveRes(res, config_file, timestamp):
     path = os.path.join(os.getcwd(),'output', config_file, 'data')
