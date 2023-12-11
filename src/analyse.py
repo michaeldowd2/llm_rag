@@ -81,14 +81,16 @@ def Analyse(config_file, config, timestamp):
 def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file):
     q, t = query()
     q = Parameterise(q, subject, '', no_factors, direction) 
-    answer = LoadContextAndRunLLM(q, t, model_props, '', vectorstore_faiss, config_file)
-    return ParseStringToList(answer)
+    response = LoadContextAndRunLLM(q, t, model_props, '', vectorstore_faiss, config_file)
+    res = ParseStringToList(response)
+    return res
 
 def LLMAnalyse(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file):
     q, t = query()
     q = Parameterise(q, subject, factor, '', direction)
-    answer = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file)
-    return answer['result']
+    response = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file)
+    res = ParseJSONResult(response, direction)
+    return res
 
 def QueryBingAndCreateVectorStore(query, subject, factor, direction, no_links, config_file, analysis_id, prefix):
     bs = query()
@@ -219,7 +221,7 @@ def BingToActualURL(url):
             "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19582" 
         }
     response = requests.get(url, headers = headers).text
-    start_ind = response.index('var u = "')
+    start_ind = response.find('var u = "')
     if start_ind >= 0:
         response = response[start_ind+9:]
         end_ind = response.find('";')
@@ -235,17 +237,6 @@ def Parameterise(inp, subject = '', factor = '', no_factors = '', direction = ''
     inp = inp.replace('{direction}', direction)
     return inp
 
-def ParseJSONResult(answer):
-    try:
-        res = json.loads(answer['result'])
-        return res
-    except Exception as e:
-        logging.exception('failed to parse json: ')
-        logging.exception(answer['result'])
-        logging.exception(e)
-        return None
-        raise Exception(e)
-
 def isNotANumber(factor):
     try:
         float(factor)
@@ -258,6 +249,44 @@ def isNotANumber(factor):
     except:
         pass
     return True
+
+def ParseJSONResult(response, direction):
+    try:
+        res = json.loads(response['result'])
+        if 'answer' in res:
+            answer = res['answer'].lower().replace('continue to', '').replace('remain','').strip()
+            numeric = 0
+            #these ones get inverted based on direction
+            if answer in ['yes']:
+                numeric = 1
+            elif answer in ['extremely likely']:
+                numeric = 0.9
+            elif answer in ['very likely']:
+                numeric = 0.75
+            elif answer in ['likely']:
+                numeric = 0.6
+            elif answer in ['possible']:
+                numeric = 0.45
+            elif answer in ['no','unlikely']:
+                answer = 0
+                
+            if direction.lower().strip() == 'decrease':
+                numeric *= -1
+    
+            if answer in ['increase','grow','rise']:
+                numeric = 1
+            elif answer in ['decrease','decline','fall']:
+                numeric = -1
+            elif answer in ['fluctuate','volatile']:
+                numeric = 0
+            res['numeric'] = numeric
+ 
+        return res
+    except Exception as e:
+        logging.exception('failed to parse json: ')
+        logging.exception(response)
+        logging.exception(e)
+        return response
 
 def ParseStringToList(answer):
     res = answer['result'].replace('"','')

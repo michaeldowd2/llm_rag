@@ -1,6 +1,6 @@
 def SentimentStore_0():
     return [
-        "{subject} market analysis"
+        "{subject} market news",
         "current market sentiment about {subject}",
         "recent reddit posts {subject}",
         "current trading analysis {subject}"
@@ -61,10 +61,9 @@ Answer the question at the end using the following context. Answer concisely in 
 Q: {question}? A:
 """
     return p, t
-
 def FactorsSplit_0():
     p = "Identify and seperate subjects in the context and create standalone bullet points. If there is only one subject, then there should only be one item in the list"
-    t """
+    t = """
 Answer the question at the end using the following context. Answer in list form with each item just being a few words max.
 <context>
 {context}
@@ -111,4 +110,3 @@ Use only the context below to give a one word answer to the question at the end.
 Q: {question}? A:
 """
     return p, t
-
