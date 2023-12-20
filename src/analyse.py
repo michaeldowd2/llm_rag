@@ -19,11 +19,13 @@ from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
 from bs4 import BeautifulSoup
-import requests
 import lxml
-import logging
 import inspect
 import src.queries as queries
+import logging
+import requests
+import http.client
+http.client.HTTPConnection.debuglevel = 1
 
 def Analyse(config_file, config, timestamp):
 
@@ -44,51 +46,75 @@ def Analyse(config_file, config, timestamp):
     func_dict = dict(inspect.getmembers(queries, inspect.isfunction))
     
     res = {}
+    # initialise file
     for subject in config['subjects']:
         analysis_id = subject.replace(' ', '_')
         res[subject] = {'sentiments':{},'factors':{}} # create dictionary for results
+        for sentiment_analysis in sentiment_analyses:
+            res[subject]['sentiments'][sentiment_analysis] = {}
+        for direction in directions:
+            res[subject]['factors'][direction] = {}
         SaveRes(res, config_file, timestamp)
-        
+ 
+    # high level sentiments
+    logging.info('swapping model grammar: json')
+    model = None; time.sleep(10)
+    model = LoadModel(model_props, grammar = 'json.gbnf')
+    for subject in config['subjects']:
+        analysis_id = subject.replace(' ', '_')
         #sentiment search and extract
         vs = QueryBingAndCreateVectorStore(func_dict[sentiment_store], subject, '', '', no_links, config_file, analysis_id, 'sentiment_search')
         for sentiment_analysis in sentiment_analyses:
-            sentiment = LLMAnalyse(subject, '', func_dict[sentiment_analysis], '', no_links, vs, model_props, config_file)
+            sentiment = LLMAnalyse(subject, '', func_dict[sentiment_analysis], '', no_links, vs, model_props, config_file, model)
             res[subject]['sentiments'][sentiment_analysis] = sentiment
             SaveRes(res, config_file, timestamp)
-
+    
+    logging.info('swapping model grammar: none')
+    model = None; time.sleep(10)
+    model = LoadModel(model_props, grammar = '')
+    
+    # directional factors
+    for subject in config['subjects']:
+        analysis_id = subject.replace(' ', '_')
         for direction in directions:
-            res[subject]['factors'][direction] = {} # create dictionary for results
-            SaveRes(res, config_file, timestamp)
-            
             #factors search and extract
             vs = QueryBingAndCreateVectorStore(func_dict[factor_store], subject, '', direction, no_links, config_file, analysis_id, direction + '_search')
-            factors = FindFactors(subject, func_dict[factors_analysis], direction, no_factors, no_links, vs, model_props, config_file)
-            
+            factors = FindFactors(subject, func_dict[factors_analysis], direction, no_factors, no_links, vs, model_props, config_file, model)
             f_no = 0
             for factor in factors:
                 if isNotANumber(factor): # sometimes llama returns a straight up number in the above list, skip this
                     res[subject]['factors'][direction][factor] = {} # create dictionary for results
                     SaveRes(res, config_file, timestamp) 
 
-                    #factor analysis
-                    vs = QueryBingAndCreateVectorStore(func_dict[effect_store], subject, factor, direction, no_links, config_file, analysis_id, direction + '_analysis_' + str(f_no))
-                    for effect_analysis in effect_analyses: #analyse vector store with multiple llm queries
-                        effect = LLMAnalyse(subject, factor, func_dict[effect_analysis], direction, no_links, vs, model_props, config_file)
-                        res[subject]['factors'][direction][factor][effect_analysis] = effect
-                        SaveRes(res, config_file, timestamp)
-                    f_no += 1
+    return # skip factor analysis
 
-def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file):
+    logging.info('swapping model grammar: json')
+    model = None; time.sleep(10)
+    model = LoadModel(model_props, grammar = 'json.gbnf')
+    
+    # directional factors analysis
+    for subject in config['subjects']:
+        analysis_id = subject.replace(' ', '_')
+        for direction in directions:
+            for factor in res[subject]['factors'][direction].keys():
+                vs = QueryBingAndCreateVectorStore(func_dict[effect_store], subject, factor, direction, no_links, config_file, analysis_id, direction + '_analysis_' + str(f_no))
+                for effect_analysis in effect_analyses: #analyse vector store with multiple llm queries
+                    effect = LLMAnalyse(subject, factor, func_dict[effect_analysis], direction, no_links, vs, model_props, config_file, model)
+                    res[subject]['factors'][direction][factor][effect_analysis] = effect
+                    SaveRes(res, config_file, timestamp)
+                
+
+def FindFactors(subject, query, direction, no_factors, no_links, vectorstore_faiss, model_props, config_file, model = None):
     q, t = query()
     q = Parameterise(q, subject, '', no_factors, direction) 
-    response = LoadContextAndRunLLM(q, t, model_props, '', vectorstore_faiss, config_file)
+    response = LoadContextAndRunLLM(q, t, model_props, '', vectorstore_faiss, config_file, model)
     res = ParseStringToList(response)
     return res
 
-def LLMAnalyse(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file):
+def LLMAnalyse(subject, factor, query, direction, no_links, vectorstore_faiss, model_props, config_file, model = None):
     q, t = query()
     q = Parameterise(q, subject, factor, '', direction)
-    response = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file)
+    response = LoadContextAndRunLLM(q, t, model_props, 'json.gbnf', vectorstore_faiss, config_file, model)
     res = ParseJSONResult(response, direction)
     return res
 
@@ -118,9 +144,10 @@ def CreateVectorDB(config_file, analysis_id, prefix):
         logging.exception(traceback.format_exc())
         raise Exception(e) 
     
-def LoadContextAndRunLLM(query, template, model_props, grammar, vectorstore_faiss, config_file):
+def LoadContextAndRunLLM(query, template, model_props, grammar, vectorstore_faiss, config_file, model = None):
     prompt = PromptTemplate(template = template, input_variables = ["context", "question"])
-    model = LoadModel(model_props, grammar)
+    if model == None:
+        model = LoadModel(model_props, grammar)
     qa = RetrievalQA.from_chain_type(
         llm=model,
         chain_type='stuff',
@@ -162,11 +189,13 @@ def LoadModel(model_props, grammar = ''):
 
 def RequestURLAndSave(url, save, config_file, analysis_id, doc_prefix, doc_id):
     try:
+        
         headers = {
             "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.19582" 
         }
+        
         logging.info('sending request for: ' + url)
-        response = requests.get(url, headers = headers).text
+        response = requests.get(url, headers = headers, timeout = 60).text
         time.sleep(2)
         path = os.path.join(os.getcwd(),'output', config_file, 'html', analysis_id)
         path = os.path.join(path, doc_prefix)
@@ -254,7 +283,15 @@ def ParseJSONResult(response, direction):
     try:
         res = json.loads(response['result'])
         if 'answer' in res:
-            answer = res['answer'].lower().replace('continue to', '').replace('remain','').strip()
+            answer = res['answer'] 
+            answer = answer.lower()
+            answer = answer.replace('its','')
+            answer = answer.replace('to', '')
+            answer = answer.replace('continue', '')
+            answer = answer.replace('remain','')
+            answer = answer.replace('stay','')
+            answer = answer.strip()
+
             numeric = 0
             #these ones get inverted based on direction
             if answer in ['yes']:
@@ -273,11 +310,11 @@ def ParseJSONResult(response, direction):
             if direction.lower().strip() == 'decrease':
                 numeric *= -1
     
-            if answer in ['increase','grow','rise']:
+            if answer in ['increase','grow','rise','rising','upward','upward trend','strengthen','strong','recovering','positive']:
                 numeric = 1
-            elif answer in ['decrease','decline','fall']:
+            elif answer in ['decrease','decline','fall','falling','downward','downward trend','tank','weaken','weak','negative']:
                 numeric = -1
-            elif answer in ['fluctuate','volatile']:
+            elif answer in ['fluctuate','volatile','stable']:
                 numeric = 0
             res['numeric'] = numeric
  

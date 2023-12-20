@@ -8,7 +8,9 @@
         "sentiment_analysis": [
             "SentimentAnalysis_0",
             "SentimentAnalysis_1",
-            "SentimentAnalysis_2"
+            "SentimentAnalysis_2",
+            "SentimentAnalysis_3",
+            "SentimentAnalysis_4"
         ],
         "factor_store": "FactorStore_0",
         "factors_analysis": "FactorsAnalysis_0",

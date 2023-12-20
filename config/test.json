@@ -1,5 +1,5 @@
 {
-    "subjects": ["Crude Oil"],
+    "subjects": ["Crude Oil","Natural Gas"],
     "directions": ["Increase"],
     "no_links":5,
     "no_factors":5,

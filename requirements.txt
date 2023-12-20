@@ -1,15 +1,4 @@
-//conda install cudatoolkit=11.8
-//conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-//conda install -c conda-forge faiss-gpu
-numpy
-pandas
-matplotlib
-langchain
-llama-cpp-python
-transformers
-sentence-transformers
-chromadb
-wakepy
-beautifulsoup4
-lxml
-httpx
+//conda install cudatoolkit=12.1
+//conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+//conda install -c faiss faiss-cpu # windows doesn't support faiss-gpu, but seems faster with pytorch gpu to create the embeddings
+types-chardet numpy pandas matplotlib langchain transformers sentence-transformers chromadb wakepy beautifulsoup4 lxml httpx

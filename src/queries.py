@@ -1,9 +1,11 @@
 def SentimentStore_0():
     return [
         "{subject} market news",
-        "current market sentiment about {subject}",
+        "{subject} current market sentiment analysis",
         "recent reddit posts {subject}",
-        "current trading analysis {subject}"
+        "current trading analysis {subject}",
+        "{subject} latest news and trends",
+        "{subject} value outlook"
     ]
 
 def SentimentAnalysis_0():
@@ -30,6 +32,28 @@ Statement: {question}
 
 def SentimentAnalysis_2():
     p = 'Market analysis shows that in the near future the value of {subject} is likely to '
+    t = """
+Use only the context below to finish the statement at the end. Answer in json form with the keys "answer" and "explanation".
+<context>
+{context}
+</context>
+Statement: {question}
+"""
+    return p, t
+
+def SentimentAnalysis_3():
+    p = 'Current outlook on the price of {subject} is '
+    t = """
+Use only the context below to finish the statement at the end. Answer in json form with the keys "answer" and "explanation".
+<context>
+{context}
+</context>
+Statement: {question}
+"""
+    return p, t
+
+def SentimentAnalysis_4():
+    p = 'In the coming weeks, the value of {subject} is expected to '
     t = """
 Use only the context below to finish the statement at the end. Answer in json form with the keys "answer" and "explanation".
 <context>
