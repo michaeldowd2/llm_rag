@@ -10,7 +10,8 @@ from langchain.llms import LlamaCpp
 from langchain.chains import LLMChain
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
-from langchain.document_loaders import BSHTMLLoader
+#from langchain.document_loaders import BSHTMLLoader
+from src.overrides.html_bs import BSHTMLLoader # override htmlloader to support strip = true
 from langchain.document_loaders import DirectoryLoader
 from langchain.chains.question_answering import load_qa_chain
 from langchain.vectorstores import FAISS
@@ -130,10 +131,10 @@ def CreateVectorDB(config_file, analysis_id, prefix):
         vector_db_path = os.path.join(os.getcwd(), 'output', config_file, 'html', analysis_id)
         vector_db_path = os.path.join(vector_db_path, prefix) + '\\'
         logging.info('loading vector db at directory: ' + vector_db_path)
-        loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8'})
+        loader = DirectoryLoader(vector_db_path, loader_cls=BSHTMLLoader, loader_kwargs={'open_encoding':'utf8','get_text_separator':'\n','get_text_strip':True})
         documents = loader.load()
         logging.info('splitting documents')
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 150)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 250)
         docs = text_splitter.split_documents(documents)
         logging.info('generating embeddings')
         embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
@@ -281,15 +282,17 @@ def isNotANumber(factor):
 
 def ParseJSONResult(response, direction):
     try:
-        res = json.loads(response['result'])
+        res = json.loads(response['result'], strict = True)
         if 'answer' in res:
-            answer = res['answer'] 
+            answer = res['answer']
             answer = answer.lower()
             answer = answer.replace('its','')
             answer = answer.replace('to', '')
             answer = answer.replace('continue', '')
             answer = answer.replace('remain','')
             answer = answer.replace('stay','')
+            answer = answer.replace('reach','')
+            answer = answer.replace('significantly','')
             answer = answer.strip()
 
             numeric = 0
@@ -310,20 +313,22 @@ def ParseJSONResult(response, direction):
             if direction.lower().strip() == 'decrease':
                 numeric *= -1
     
-            if answer in ['increase','grow','rise','rising','upward','upward trend','strengthen','strong','recovering','positive']:
+            if answer in ['increase','grow','rise','rising','upward','upward trend','strengthen','strong','recovering','positive','bullish','new highs','new high','record highs','record high','new heights','record heights']:
                 numeric = 1
-            elif answer in ['decrease','decline','fall','falling','downward','downward trend','tank','weaken','weak','negative']:
+            elif answer in ['decrease','decline','fall','falling','downward','downward trend','tank','weaken','weak','negative','bearish','new lows','new low','record lows','record low']:
                 numeric = -1
             elif answer in ['fluctuate','volatile','stable']:
                 numeric = 0
             res['numeric'] = numeric
- 
-        return res
+            return res
+        else:
+            print('Answer not in Json Result')
     except Exception as e:
-        logging.exception('failed to parse json: ')
-        logging.exception(response)
-        logging.exception(e)
-        return response
+        print('Failed to parse Json Result')
+        print(e)
+         
+    print(response)
+    return {"answer": "", "explanation": "Failed to parse JSON result - see logs", "numeric": 0}
 
 def ParseStringToList(answer):
     res = answer['result'].replace('"','')
