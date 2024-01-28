@@ -293,6 +293,15 @@ def ParseJSONResult(response, direction):
             answer = answer.replace('stay','')
             answer = answer.replace('reach','')
             answer = answer.replace('significantly','')
+            answer = answer.replace('experience','')
+            answer = answer.replace('a','')
+            answer = answer.replace('significant','')
+            answer = answer.replace('some','')
+            answer = answer.replace('cautiously','')
+            answer = answer.replace('slightly','')
+            answer = answer.replace('see','')
+            answer = answer.replace('major','')
+            answer = answer.replace('against the us dollar','')
             answer = answer.strip()
 
             numeric = 0
@@ -313,9 +322,9 @@ def ParseJSONResult(response, direction):
             if direction.lower().strip() == 'decrease':
                 numeric *= -1
     
-            if answer in ['increase','grow','rise','rising','upward','upward trend','strengthen','strong','recovering','positive','bullish','new highs','new high','record highs','record high','new heights','record heights']:
+            if answer in ['increase','rally','appreciate','upward momentum','growth','bullish trend','ascension','optimistic','gains','upward trajectory','trending upward','recover','gain strength','rebound','grow','rise','rising','upward','upward trend','recent climb','strengthen','strong','recovering','positive','bullish','new highs','new high','record highs','record high','new heights','record heights']:
                 numeric = 1
-            elif answer in ['decrease','decline','fall','falling','downward','downward trend','tank','weaken','weak','negative','bearish','new lows','new low','record lows','record low']:
+            elif answer in ['decrease','depreciate','shed value','drop','decline','crash','trade at lower levels','declining','drop','downward trajectory','lose strength','decreasing','weakening','decline further','fall','falling','downward','downward trend','tank','weaken','weak','negative','bearish','new lows','new low','record lows','record low']:
                 numeric = -1
             elif answer in ['fluctuate','volatile','stable']:
                 numeric = 0
