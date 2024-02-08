@@ -13,7 +13,7 @@ import logging
 import datetime
 from wakepy import keep
 import json
-from src.analyse import Analyse
+from src.ragllm import ragllm
 
 def CreateFolders(config_file):
     logging.info("Creating folder structure")
@@ -42,4 +42,4 @@ if __name__ == "__main__":
         
         CreateFolders(config_file)
         config = ReadConfigFile(config_file)
-        Analyse(config_file, config, timestamp)
+        ragllm(config_file, config, timestamp)

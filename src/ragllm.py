@@ -28,7 +28,7 @@ import requests
 import http.client
 http.client.HTTPConnection.debuglevel = 1
 
-def Analyse(config_file, config, timestamp):
+def ragllm(config_file, config, timestamp):
 
     subjects = config['subjects']
     directions = config['directions']

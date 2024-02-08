@@ -1,5 +1,5 @@
 {
-    "subjects": ["Crude Oil","Natural Gas","Ethereum","Bitcoin","S&P 500","FTSE 100","US Dollar","Euro","Pound Sterling","Japanese Yen","Chinese Yuan","Canadian Dollar","Australian Dollar","Swiss Franc","New Zealand Dollar"],
+    "subjects": ["Crude Oil","Natural Gas","Ethereum","Bitcoin","US Dollar","Euro","Pound Sterling","Japanese Yen","Chinese Yuan","Canadian Dollar","Australian Dollar","Swiss Franc","New Zealand Dollar","Indian Rupee", "Brazilian Real", "Russian Ruble", "South African Rand"],
     "directions": ["Increase","Decrease"],
     "no_links":5,
     "no_factors":5,
