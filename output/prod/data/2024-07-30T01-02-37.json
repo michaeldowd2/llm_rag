@@ -1,0 +1,812 @@
+{
+    "Crude Oil": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "Crude Oil has increased by 5.58% since the beginning of 2024 and is expected to trade at 83.56 USD/BBL by the end of this quarter, according to Trading Economics global macro models and analysts expectations. Additionally, geopolitical tensions and supply risks could contribute to further price increases in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase",
+                "explanation": "Crude Oil has experienced a 5.58% increase since the beginning of 2024, and it is expected to trade at 83.56 USD/BBL by the end of this quarter. Additionally, analysts expect it to trade at 89.27 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "Crude Oil increased 4 USD/BBL or 5.58% since the beginning of 2024, and it is expected to trade at 83.56 USD/BBL by the end of this quarter, according to Trading Economics global macro models and analysts expectations. Looking forward, we estimate it to trade at 89.27 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "bearish",
+                "explanation": "Crude Oil has experienced a decline in price since the beginning of 2024, and analysts expect it to continue trading at lower levels in the coming months.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "trade at 83.56 USD/BBL by the end of this quarter",
+                "explanation": "According to Trading Economics global macro models and analysts expectations, Crude Oil is expected to trade at 83.56 USD/BBL by the end of this quarter.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "economic growth: an expanding economy leads to increased demand for energy driving up crude oil prices.": {},
+                "geopolitical tensions: conflicts or political instability in oil-producing countries can disrupt supply and push prices higher.": {},
+                "opec+ agreements: the organization of petroleum exporting countries (opec) and its allies (opec+) often agree on production cuts to support prices.": {},
+                "supply disruptions: natural disasters accidents or other unforeseen events that reduce oil supply can cause crude oil prices to rise.": {},
+                "speculation and investment: market sentiment and financial investments in crude oil futures contracts can significantly impact oil prices.": {}
+            },
+            "Decrease": {
+                "increased supply from us shale oil boom": {},
+                "economic slowdowns reducing demand": {},
+                "opec+ production cut negotiations": {},
+                "technological advancements in energy efficiency": {},
+                "geopolitical events and severe weather disruptions": {}
+            }
+        }
+    },
+    "Natural Gas": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context mentions that natural gas prices have been decreasing since the beginning of 2024 and are expected to trade at 2.70 USD/MMBtu by the end of this quarter. Additionally, it is forecasted to recover in 2025, which suggests a further decrease in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase",
+                "explanation": "Natural gas producers are hoping to make hay while the sun shines, encouraging investors to bet on natural gas stocks as their cash flows boom. Most natural gas companies are using incremental cash flows from higher gas prices to strengthen their balance sheets and return more capital to shareholders.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "Natural gas has experienced a significant decrease since the beginning of 2024, and analysts expect it to trade at 3.16 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The current outlook on the price of natural gas is that it is expected to trade at 3.16 USD/MMBtu in 12 months time, after decreasing by 0.27 USD/MMBtu or 11.59% since the beginning of 2024.",
+                "explanation": "Natural gas is expected to trade at 2.70 USD/MMBtu by the end of this quarter, according to Trading Economics global macro models and analysts expectations. The price has decreased by 0.27 USD/MMBtu or 11.59% since the beginning of 2024.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "trade at lower levels",
+                "explanation": "The context mentions that natural gas has been decreasing in price and is expected to trade at 2.70 USD/MMBtu by the end of this quarter, which is lower than its current value.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "economic growth": {},
+                "strength of the economy": {},
+                "increased demand for goods and services from commercial and industrial sectors": {},
+                "infrastructure constraints or inability of natural gas consumers to switch fuels quickly": {},
+                "supply-side factors such as reduced production low volume of natural gas in storage and decreased imports and exports": {}
+            },
+            "Decrease": {
+                "increased supply due to higher production or lower imports": {},
+                "lower demand due to warmer winters or reduced industrial usage": {},
+                "higher inventory levels in storage facilities": {},
+                "availability and lower prices of other fuels (e.g. coal renewable energy)": {},
+                "decreased lng exports": {}
+            }
+        }
+    },
+    "Ethereum": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context indicates a mix of conservative and optimistic predictions for Ethereum's short-term price, with experts like Anthony Sano and Credible Crypto proposing highly bullish forecasts. However, the overall sentiment tilts towards a cautious approach in the near future, reflecting typical market uncertainties and volatility. The Ethereum price is expected to decrease by 3.85% in the next month and not reach $100,000 or $1 million anytime soon.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase significantly",
+                "explanation": "The context suggests that Ethereum has experienced rapid growth since its inception and has the potential to become an enormously valuable asset in the near future. Experts predict a wide range of possible prices for ETH, with some suggesting it could reach $10,000 - $20,000 by 2024.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The context mentions several experts who have a positive outlook on Ethereum's price, with some predicting it could reach between $10,000 and $20,000 by 2024. Additionally, the current upward trend in the past week and month indicates that Ethereum has strong potential for growth.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "bullish",
+                "explanation": "Experts like Anthony Sano and Credible Crypto propose highly bullish forecasts for Ethereum, suggesting it could soar to between $10,000 and $20,000 by 2024. The current sentiment is bearish, but the majority of experts have a positive outlook on Ethereum's price in the mid to long term.",
+                "numeric": 1
+            },
+            "SentimentAnalysis_4": {
+                "answer": "",
+                "explanation": "Failed to parse JSON result - see logs",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "market demand - when there's high demand for ethereum its price tends to rise. this can be driven by increased adoption positive news or favorable market conditions.": {},
+                "technological advancements - upgrades and improvements to the ethereum network attract more investors and increase its value.": {},
+                "supply and demand dynamics - the availability of ethereum tokens and the demand for them directly affects its price.": {},
+                "historical price data - analyzing historical price trends can help predict future fluctuations in ethereum's value.": {},
+                "market sentiment - positive sentiment surrounding ethereum can drive up its value while negative sentiment can have the opposite effect.": {}
+            },
+            "Decrease": {
+                "decreased demand for ethereum": {},
+                "increased supply of ethereum": {},
+                "negative market sentiment": {},
+                "loss of confidence in the ethereum network": {},
+                "adverse regulatory changes or actions": {}
+            }
+        }
+    },
+    "Bitcoin": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "Based on the context provided, including the positive trends and algorithmically generated price prediction, it is likely that the value of Bitcoin will increase in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "continue to fluctuate",
+                "explanation": "The context mentions that the value of Bitcoin has been consistently increasing, but it also experiences regular drops. This indicates that the value of Bitcoin will continue to fluctuate in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "remain volatile",
+                "explanation": "The context mentions that Bitcoin's price cycles keep shortening and its average value keeps increasing, which indicates a positive trend. However, external factors such as global news and events could impact Bitcoin's price trajectory, making it likely to remain volatile in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "bullish",
+                "explanation": "The current sentiment is neutral with 23 technical analysis indicators signaling bullish signals and only 8 signaling bearish signals. The Bitcoin price forecast for the next 30 days shows a gain of 17%.",
+                "numeric": 1
+            },
+            "SentimentAnalysis_4": {
+                "answer": "",
+                "explanation": "Failed to parse JSON result - see logs",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "increased demand for cryptocurrency": {},
+                "decreased supply of bitcoin": {},
+                "positive media coverage and public perception": {},
+                "regulatory developments favorable to cryptocurrencies": {},
+                "technological advancements in the blockchain and mining sectors": {}
+            },
+            "Decrease": {
+                "increased supply due to mining or new forks": {},
+                "decreased demand from investors or users": {},
+                "negative news or events affecting the cryptocurrency market": {},
+                "competition from other cryptocurrencies or digital assets": {},
+                "regulatory changes or restrictions": {}
+            }
+        }
+    },
+    "US Dollar": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context suggests that the US dollar could weaken by 10-15% by mid-2024 due to potential Federal Reserve rate cuts and cooling inflation. Additionally, the strong US dollar world is expected to continue, but any erosion in its valuation will likely be gradual.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "remain strong",
+                "explanation": "The US dollar is likely to stay 'stronger for longer' due to the strength of the US economy, solid growth generation, and limited prospects for global macroeconomic divergence. Additionally, rate cuts within the next 12 months should not erode the yield on dollar bonds too far.",
+                "numeric": 1
+            },
+            "SentimentAnalysis_2": {
+                "answer": "remain strong",
+                "explanation": "The US economy continues to perform well, supporting US stocks and maintaining high interest rates. Additionally, rate cuts within the next 12 months are not expected to erode the yield on dollar bonds significantly. These factors, along with limited prospects for global macroeconomic divergence, suggest that the US Dollar will remain strong in the near future.",
+                "numeric": 1
+            },
+            "SentimentAnalysis_3": {
+                "answer": "",
+                "explanation": "Failed to parse JSON result - see logs",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "remain relatively stable",
+                "explanation": "The context mentions that the US economy is doing well and the rate cuts in the next 12 months are not expected to erode the yield on dollar bonds significantly. Additionally, there are no major factors expected to cause a sharp swing in the value of the US Dollar.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "strong economic growth": {},
+                "higher interest rates": {},
+                "lower inflation": {},
+                "safe-haven status": {},
+                "supply and demand factors": {}
+            },
+            "Decrease": {
+                "easy monetary policy by the federal reserve": {},
+                "inflation rates": {},
+                "changes in the balance of trade": {},
+                "political instability": {},
+                "investor behavior and risk aversion": {}
+            }
+        }
+    },
+    "Euro": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The context mentions that the euro is expected to appreciate against the dollar next year, with forecasts suggesting it will strengthen between 1.12 and 0.92. Additionally, the euro could rebound after rapid and significant depreciations against the dollar, which has been the historical tendency.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "appreciate",
+                "explanation": "The context suggests that the euro has been experiencing a turbulent time, but it has recently shown signs of strengthening. The ECB has hiked the key rate, and the EUR/USD exchange rate has risen by 2.5% over the last four weeks and 10% over the last six months. Additionally, forecasts predict that the euro will continue to appreciate against the pound in the coming weeks, months, and years.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "appreciate",
+                "explanation": "The context suggests that the euro is expected to strengthen against the dollar, with historical tendencies for rebounding after significant depreciations. Additionally, the euro has been rising in the past six months and is forecasted to continue rising in the coming weeks and months.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The euro is likely to appreciate against the dollar next year.",
+                "explanation": "Algorithm-based forecaster Wallet Investor predicts that the euro will strengthen and trade between 1.12 and 0.92 in 2023. This outlook is supported by historical tendencies for the euro to rebound after rapid and significant depreciations against the dollar.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "appreciate",
+                "explanation": "The context mentions that the euro has been appreciating in recent weeks and is forecasted to continue doing so in the near term.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "strong economic performance in the eurozone": {},
+                "rising interest rates set by the european central bank (ecb)": {},
+                "positive news or events related to the eurozone countries or the eu": {},
+                "decreasing geopolitical risks in the region": {},
+                "increased demand for euros in the foreign exchange market": {}
+            },
+            "Decrease": {
+                "european central bank's monetary policy decisions": {},
+                "economic reports affecting the eurozone economy": {},
+                "relation of the euro against the u.s. dollar": {},
+                "political instability in europe": {},
+                "global economic trends and investor sentiment": {}
+            }
+        }
+    },
+    "Pound Sterling": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The context mentions that the Pound to Euro exchange rate has held firm around 1.1830 and RBC Capital Markets expects the Pound will maintain a firm tone in the short term amid favourable yield expectations. Additionally, several forecasts predict the value of Pound Sterling to increase against the US Dollar, with projections ranging from $1.24 by the end of 2024 to as high as $1.36 by September 2025.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "continue its recovery",
+                "explanation": "The context mentions that the Pound Sterling managed to preserve the recovery gains seen in the first half of 2023, reaching a 15-month high of 1.3142. This indicates that the currency is likely to continue its recovery in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "remain stable",
+                "explanation": "The context mentions several uncertainties and looming uncertainties that make it difficult to predict the course of the Pound Sterling against the US Dollar. Additionally, the British Pound Currency Index (BXY) is a significant indicator demonstrating how strong the pound is in comparison with other major currencies, but the United Kingdom is relatively small in size and the GBP plays a big role in the world economy. Traders monitor changes of such economic indicators as the Bank of England interest rate, the GDP, etc., to predict the next trend for the pound.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The current outlook on the price of Pound Sterling is uncertain due to various factors such as increased odds of a recession, dovish pivot in monetary policies, and general elections. However, some analysts predict that the Pound Sterling may gain value against the US Dollar in the coming years.",
+                "explanation": "The context provided discusses the various uncertainties and unknowns surrounding the future of the Pound Sterling against the US Dollar. Despite these uncertainties, some analysts have made predictions that the Pound Sterling may gain value against the US Dollar in the coming years, such as reaching 1.31 by the end of 2025 according to BNP Paribas and 1.24 by the end of 2024 according to Morgan Stanley.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "experience fluctuations",
+                "explanation": "The context mentions various factors such as increased odds of a recession, dovish pivot in monetary policies, and general elections that are likely to drive the GBP/USD price action. These uncertainties make it difficult to predict the course of the Pound Sterling against the US Dollar (USD) in the year ahead.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "decrease in interest rates - lower interest rates make it more appealing for people to save in the uk causing an inflow of money from abroad and leading to an appreciation of the pound sterling.": {},
+                "lower inflation - when uk goods become comparatively cheaper due to lower inflation they become more competitive increasing demand for uk goods and consequently demand for the pound sterling.": {},
+                "increased competitiveness of uk goods - when uk goods are in high demand globally it leads to an increase in demand for the pound sterling as foreigners need to buy the currency to purchase those goods.": {},
+                "current account surplus - a large inflow of foreign exchange due to a current account surplus will cause an appreciation of the pound sterling.": {},
+                "expectations/forecasts - if investors expect the pound sterling to appreciate in the future they will buy it now causing the increase in demand and decrease in supply that will actually lead to the appreciation.": {}
+            },
+            "Decrease": {
+                "forecasted recession in the uk leading to low interest rates and possible monetary easing.": {},
+                "rising energy imports and their impact on import spending.": {},
+                "house price fall increasing the likelihood of persistently low interest rates.": {},
+                "loss of the uk's single market access due to brexit resulting in less inward investment and reduced long-term demand for sterling.": {},
+                "strength of the euro or dollar compared to the pound sterling influenced by economic news or monetary policies in those countries.": {}
+            }
+        }
+    },
+    "Japanese Yen": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context mentions that the yen is expected to trade at 163.364 by the end of this quarter and at 170.467 in one year, according to Trading Economics global macro models and analysts expectations. Additionally, it is predicted that inflation in Japan will remain above 3%, which could lead to further weakening of the yen.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "stabilize",
+                "explanation": "The context mentions that the Japanese yen has been weakening against the US dollar, but it is expected to trade at 163.36 by the end of this quarter and at 170.47 in one year according to Trading Economics global macro models and analysts expectations. This suggests that the yen's value may stabilize in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The recent surge in the yen's value and the expected trading price at 163.364 by the end of this quarter indicate that the yen's value is likely to increase in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "163.364 by the end of this quarter",
+                "explanation": "Trading Economics global macro models and analysts expectations predict that the Japanese Yen will be priced at 163.364 by the end of this quarter.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "continue its downward trend",
+                "explanation": "The Japanese Yen is expected to trade at 163.364 by the end of this quarter and at 170.467 in one year, according to Trading Economics global macro models and analysts expectations. The yen has been weakening due to factors such as Japan's large gap between interest rates and those elsewhere, which is likely to persist for some time.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "increased demand for safe-haven assets": {},
+                "stronger economic indicators (e.g. gdp cpi)": {},
+                "monetary policy decisions by bank of japan": {},
+                "favorable fiscal and trade policies": {},
+                "market speculation": {}
+            },
+            "Decrease": {
+                "widening gap between japanese and u.s. interest rates": {},
+                "surging fuel costs after the russia-ukraine war": {},
+                "relationship with the us dollar": {},
+                "central bank interventions by the bank of japan": {},
+                "global economic indicators shaping market sentiment": {}
+            }
+        }
+    },
+    "Chinese Yuan": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The context suggests that the People's Bank of China (PBOC) is actively managing the yuan's value, and analysts expect it to be priced at 7.34 by the end of this quarter and at 7.48 in one year according to Trading Economics global macro models projections. Additionally, the USDCNY increased slightly on Tuesday July 30, indicating a potential strengthening of the yuan.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase",
+                "explanation": "The USDCNY increased 0.0045 or 0.06% to 7.2886 on Monday July 22 from 7.2841 in the previous trading session. The Chinese Yuan is expected to trade at 7.34 by the end of this quarter, according to Trading Economics global macro models and analysts expectations. Looking forward, we estimate it to trade at 7.48 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "remain stable",
+                "explanation": "The PBOC is expected to continue managing the yuan's value carefully, balancing the need for stability with the pressures of a potentially depreciating currency. The upcoming July plenum of China's Communist Party may provide further clarity on the government's policy direction, significantly impacting the yuan and overall economic strategy.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "US Dollar Chinese Yuan is expected to trade at 7.34 by the end of this quarter and at 7.48 in one year, according to Trading Economics global macro models and analysts expectations.",
+                "explanation": "The current outlook on the price of Chinese Yuan is based on the forecasts provided by Trading Economics global macro models and analysts expectations, which predict that the Chinese Yuan will trade at 7.34 by the end of this quarter and at 7.48 in one year.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "remain relatively stable",
+                "explanation": "The PBOC will continue managing the yuan's value carefully, balancing stability with potential depreciation pressures. The upcoming July plenum may provide policy clarity, impacting the yuan and overall economic strategy.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "higher interest rates on chinese assets compared to us and european ones attracting capital and driving up the yuan's value.": {},
+                "the weakening of the us dollar due to increased risk appetite and the yuan benefiting from the us dollar's status as the global reserve currency.": {},
+                "china's strict capital controls on its currency limiting the amount of yuan that can be taken in and out of the country which can make alternatives like the dollar more attractive to currency holders.": {},
+                "the chinese government's efforts to internationalize the yuan and boost its value facing challenges such as capital controls and the longstanding popularity of the us dollar.": {},
+                "china's yuan accounting for a small percentage of swift transactions compared to the us dollar indicating lower global usage and potential for growth in the yuan's prominence.": {}
+            },
+            "Decrease": {
+                "weaker chinese economy": {},
+                "threat to exports and economic growth in other countries": {},
+                "investment opportunities abroad": {},
+                "lower us inflation": {},
+                "appreciation reversal reflecting weaker prospects for china's continued growth": {}
+            }
+        }
+    },
+    "Canadian Dollar": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context suggests that the Canadian dollar is expected to weaken against the US dollar due to factors such as inflation, higher interest rates in the US, and weaker economic growth in Canada compared to the US.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "decrease",
+                "explanation": "The context mentions that the USDCAD has been increasing and is expected to reach 1.37994 by the end of this quarter and 1.41538 in one year. Additionally, inflation is high in both economies, which might lead to higher interest rates in the US, causing the US dollar to strengthen against the Canadian dollar.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "decrease",
+                "explanation": "The context mentions that the USDCAD has been decreasing and is expected to trade at lower values in the coming months and years. Additionally, the Bank of Canada's assumptions and analysts' expectations point towards a weaker Canadian Dollar.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "1.37994 by the end of this quarter and at 1.41538 in one year, according to Trading Economics global macro models projections and analysts expectations.",
+                "explanation": "The forecasted prices for the Canadian Dollar are based on Trading Economics global macro models and analysts expectations.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "decrease",
+                "explanation": "The context mentions that the USDCAD rate is near two-week highs and the Canadian dollar has weakened against the US dollar over the week. Additionally, analysts expect the USD/CAD to be priced at 1.37994 by the end of this quarter and at 1.41538 in one year.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "rising interest rates set by the bank of canada (boc)": {},
+                "increasing price of oil canada's largest export": {},
+                "strengthening canadian economy relative to other countries": {},
+                "lower inflation rate compared to other countries": {},
+                "high demand for canadian financial assets such as stocks and bonds": {}
+            },
+            "Decrease": {
+                "plunge in oil prices: canada exports energy and has been greatly influenced by energy prices since the 1980s.": {},
+                "economic growth: a variety of economic factors can contribute to depreciating the us dollar including monetary policy rising prices (inflation) demand for currency and economic growth.": {},
+                "inflation: rising prices or inflation in the united states can cause the value of the canadian dollar to decrease relative to the us dollar.": {},
+                "demand for currency: changes in demand for a particular currency can affect its value relative to other currencies.": {},
+                "export prices: the decline in export prices such as oil prices can negatively impact the value of the canadian dollar.": {}
+            }
+        }
+    },
+    "Australian Dollar": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "Most bank forecasts predict the Australian dollar to rise in 2024, driven by factors such as interest rates, commodity prices, and risk appetite.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase",
+                "explanation": "The context suggests that the Australian dollar is expected to rise in value due to factors such as strong commodity prices, positive global growth, and higher interest rates compared to other countries.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "rise",
+                "explanation": "The Australian dollar has been dropping in value due to global economic factors, but leading into 2024, most bank forecasts predict it will rise. It will be influenced by interest rates, commodity prices, and risk appetite.",
+                "numeric": 1
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The current outlook on the price of the Australian dollar is that it is expected to strengthen over the course of 2024, with a gradually easing USD and improving risk sentiment. The AUD is predicted to reach $US0.70 by the end of the year, with some banks predicting even higher values in the long term.",
+                "explanation": "The context provided indicates that the Australian dollar is expected to strengthen due to a gradually easing USD and improving risk sentiment. The AUD is predicted to reach $US0.70 by the end of the year, with some banks predicting even higher values in the long term.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "rise",
+                "explanation": "The context suggests that the Australian dollar is likely to rise in value over the next six months, with forecasts from various banks predicting an increase in its value against the US dollar by mid-year.",
+                "numeric": 1
+            }
+        },
+        "factors": {
+            "Increase": {
+                "rising commodity prices particularly those that australia exports": {},
+                "stronger global demand for australian goods and services": {},
+                "an increase in interest rates in australia compared to other countries": {},
+                "a positive change in the terms of trade (i.e. the price of exported goods increases relative to imported goods)": {},
+                "favorable economic data or news that indicates growth in the australian economy": {}
+            },
+            "Decrease": {
+                "falling commodities prices": {},
+                "rising interest rates in other countries": {},
+                "inflation in australia": {},
+                "economic slowdown or recession": {},
+                "decline in terms of trade": {}
+            }
+        }
+    },
+    "Swiss Franc": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context suggests that the Swiss franc's value has been increasing due to lower inflation and support from the Swiss National Bank. However, with less aggressive central bank policies and falling inflation elsewhere, the Swiss franc is expected to lose some of its previous strength in 2024.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "lose some strength",
+                "explanation": "The context suggests that factors supporting the Swiss Franc in recent years, such as low inflation and SNB intervention, are weakening. Additionally, the franc's current high valuation may not be sustained if geopolitical uncertainties recede.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "depreciate",
+                "explanation": "The context suggests that the Swiss Franc's current high valuation is unlikely to be sustained due to various factors such as a less aggressive central bank, falling inflation elsewhere, and unsustainable bilateral valuations. Additionally, the impact of geopolitical uncertainties on the currency's value is expected to fade if the threat recedes.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The Swiss franc will continue to look expensive based on interest rate differentials alone, and its strength may fade in 2024.",
+                "explanation": "The Swiss National Bank's (SNB) less aggressive stance and falling inflation elsewhere will likely deprive the Swiss franc of some support. The currency may benefit less from balance of payment flows and could be affected by the era of relentless appreciation coming to an end.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "remain relatively stable",
+                "explanation": "The context mentions that the USDCHF increased only marginally on July 30 and the three-month forecast for EUR/CHF rate is CHF0.95. Additionally, the Swiss National Bank (SNB) has acted decisively to support the value of the franc. The overall expectation is that the Swiss Franc will lose some strength in 2024 but the immediate future seems stable.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "safe-haven status for financial investments": {},
+                "demand for swiss francs driving up its value": {},
+                "swiss national bank's sales of foreign assets": {},
+                "slowdown of growth dynamics in the eurozone and geopolitical risks": {},
+                "appreciation in value of swiss franc dampening inflation": {}
+            },
+            "Decrease": {
+                "lower demand for safe-haven assets: in times of economic uncertainty investors tend to seek safety in currencies like the swiss franc. if the global economic outlook improves or risks subside demand for safe-haven assets may decrease leading to a decrease in the value of the swiss franc.": {},
+                "increased inflation in switzerland: if the swiss inflation rate rises above that of other countries it could lead to a decrease in the value of the swiss franc as investors seek higher returns in other currencies.": {},
+                "monetary policy actions by the snb: the swiss national bank (snb) can influence the value of the swiss franc through its monetary policies. if the snb decides to implement expansionary measures such as lowering interest rates or engaging in quantitative easing it could cause the value of the swiss franc to decrease.": {},
+                "stronger global economy: a stronger global economy may lead to increased demand for goods and services from switzerland which could weaken the swiss franc as more foreign currency is needed to purchase swiss products.": {},
+                "decreased demand for swiss exports: if demand for swiss exports decreases due to factors": {}
+            }
+        }
+    },
+    "New Zealand Dollar": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context mentions that the NZDUSD has been decreasing and is expected to trade at 0.57 in 12 months time, which indicates a further decrease in the value of New Zealand Dollar in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "continue decreasing",
+                "explanation": "The New Zealand Dollar has been experiencing a downward trend in recent weeks, and with no clear indications of reversal, it is likely to continue decreasing.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The New Zealand Dollar has underperformed in recent weeks, but with strong fundamentals and encouraging outlook for the economy, it is expected to regain its strength in the coming months.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "0.57",
+                "explanation": "The Trading Economics global macro models and analysts expectations predict that the New Zealand Dollar will trade at 0.60 by the end of this quarter, and it is estimated to trade at 0.57 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "trade at 0.57",
+                "explanation": "The Trading Economics global macro models and analysts expectations predict that the New Zealand Dollar will trade at 0.60 by the end of this quarter, and it is estimated to trade at 0.57 in 12 months time.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "higher commodity prices: when the prices of new zealand's export commodities rise it leads to expectations of higher interest rates and stronger returns on investments in new zealand causing the new zealand dollar to appreciate.": {},
+                "interest rate differentials: when short-term interest rates in new zealand are higher than those in other countries investors will seek higher returns by investing in new zealand leading to an appreciation of the new zealand dollar.": {},
+                "risk appetite: an increase in risk appetite among investors can lead to a stronger demand for the new zealand dollar as it is considered a risky asset due to its exposure to commodity prices and global economic conditions.": {},
+                "current account deficit: a smaller current account deficit or a shift towards surplus will strengthen the new zealand dollar by reducing the supply of foreign currency in the market and increasing demand for the new zealand dollar.": {},
+                "global economic factors: the value of the new zealand dollar can be influenced by global economic conditions such as changes in economic growth inflation and interest rates in major economies which affect investors' appetite": {}
+            },
+            "Decrease": {
+                "generalized us dollar weakness": {},
+                "out-performance of the new zealand economy in world terms": {},
+                "slowing net migration trend and its impact on domestic demand": {},
+                "widening of our own current account deficit": {},
+                "further narrowing of new zealand's growth differential with the rest of the world": {}
+            }
+        }
+    },
+    "Indian Rupee": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The Indian rupee is forecasted to marginally strengthen against the US Dollar over the coming months and gain slightly in a year as Reserve Bank of India uses its foreign exchange reserves to manage volatility and keep the currency relatively strong, according to FX strategists. Some longer-term forecasts regard the current weakness as a correction in long-term dollar strength against the rupee, indicating that it is likely to appreciate in the near future.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "appreciate against the US Dollar",
+                "explanation": "The Indian rupee is forecasted to marginally strengthen against the US Dollar over the coming months and gain slightly in a year as Reserve Bank of India uses its foreign exchange reserves to manage volatility and keep the currency relatively strong, according to FX strategists. The USD to INR forecast by Economic Times suggests that the Indian rupee is likely to appreciate, with the potential to reach 82 to the dollar by end-2024. Additionally, global brokerage firm Goldman Sachs predicts a positive trajectory for the Indian rupee in 2024, forecasting that it may rise to 81 against the US dollar by the end of the year.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "appreciate",
+                "explanation": "The context mentions multiple forecasts from different sources, all predicting that the Indian Rupee will appreciate against the US Dollar in the coming months and years. Factors such as foreign inflows, Reserve Bank of India's forex reserves management, and expectations of more aggressive rate cuts by the US Federal Reserve contribute to this positive outlook.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "bearish",
+                "explanation": "The Indian rupee has been experiencing a sustained long-term downtrend over the past decade, and this trend continues in 2022. The rupee's weakness has accelerated this year, with an all-time low of 82.77 against the dollar in October. Economic experts predict that the rupee will continue to weaken in the coming months and years.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "appreciate",
+                "explanation": "The context mentions that several forecasts predict the Indian Rupee to appreciate against the US Dollar in the near term and over the next year. The reasons for this appreciation include expectations of continued foreign inflows, moderation in UST yields and crude oil prices, and the Reserve Bank of India's efforts to accumulate inflows and bolster foreign exchange reserves.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "decreasing demand for us dollar: if the demand for us dollar decreases globally it can lead to a decrease in its value compared to other currencies including indian rupee. this could result in the rupee gaining value.": {},
+                "increase in foreign investment: an increase in foreign investment in india can lead to an increase in demand for indian rupee which can cause its value to rise.": {},
+                "strong economic growth: if india experiences strong economic growth it can attract more foreign investment and increase the demand for indian rupee causing its value to rise.": {},
+                "decrease in current account deficit: a decrease in india's current account deficit can lead to a stronger rupee as it indicates that the country is less reliant on borrowing from foreign sources.": {},
+                "rise in interest rates: if indian interest rates rise it can attract more foreign investment and increase the demand for indian rupee causing its value to rise.": {}
+            },
+            "Decrease": {
+                "global economic uncertainties": {},
+                "trade deficit of the country": {},
+                "rise in crude oil prices": {},
+                "outflow of foreign direct investment (fdi) from the indian markets": {},
+                "sell-off of equity by foreign investors": {}
+            }
+        }
+    },
+    "Brazilian Real": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "Analysts predict that the Brazilian economy will slow down heading into 2023, which could lead to a decrease in the value of the real. Additionally, the outcome of the October presidential elections and the level of interest rates compared to other countries will play a role in determining the direction of the real.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "depreciate against the US Dollar",
+                "explanation": "Analysts predict a slowdown in the Brazilian economy and a decrease in commodity prices, which will lead to a weaker real. Additionally, fiscal tightening after the October elections will contribute to the decline.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The Brazilian Real is expected to trade at 5.69 by the end of this quarter, and at 5.99621 in one year, according to Trading Economics global macro models and analysts expectations.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "5.69190 by the end of this quarter and at 5.99621 in one year, according to Trading Economics global macro models projections and analysts expectations.",
+                "explanation": "Trading Economics predicts that the US Dollar Brazilian Real exchange rate will be at 5.69190 by the end of this quarter and at 5.99621 in one year, based on their global macro models and analysts' expectations.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "decrease",
+                "explanation": "The context mentions that the Brazilian Real lost its recovery momentum since early June and that EURBRL prices bounced off aggressively from a critical resistance level. Additionally, it is forecasted that US Dollar Brazilian Real will be priced at 5.69190 by the end of this quarter and at 5.99621 in one year.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "economic growth in brazil": {},
+                "decreasing inflation rates": {},
+                "high demand for brazilian goods and commodities": {},
+                "political stability and sound economic policies": {},
+                "strong investor sentiment and confidence in the brazilian economy": {}
+            },
+            "Decrease": {
+                "economic conditions in brazil": {},
+                "political stability and government policies": {},
+                "global economic conditions": {},
+                "investor sentiment": {},
+                "perceived risk associated with investing in brazil": {}
+            }
+        }
+    },
+    "Russian Ruble": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The Russian ruble has been rising, hitting a seven-year high due to capital controls, rising exports and falling imports. These factors suggest that it is likely to continue increasing in value.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase",
+                "explanation": "The Russian Ruble is expected to trade at 90.0347 by the end of this quarter and at 97.9228 in one year, according to Trading Economics global macro models projections and analysts expectations.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The Russian Ruble has been strengthening due to capital controls, rising exports and falling imports. Additionally, analysts expect it to trade at 90.03 by the end of this quarter and at 97.92 in one year.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The current outlook on the price of the Russian Ruble is that it is expected to trade at 90.0347 by the end of this quarter and at 97.9228 in one year, according to Trading Economics global macro models projections and analysts expectations.",
+                "explanation": "The Russian Ruble is forecasted to appreciate against the US Dollar in both the short and long term. The current outlook suggests that the Russian Ruble will trade at 90.0347 by the end of this quarter, which is a 4.1% increase from its current value. In one year, it is expected to trade at 97.9228, indicating a 15.6% appreciation from its current level.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "increase",
+                "explanation": "The Russian Ruble is expected to trade at 90.03 by the end of this quarter and at 97.92 in one year, according to Trading Economics global macro models projections and analysts expectations.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "soaring commodity prices: after russia invaded ukraine on february 24 already high oil and natural gas prices rose even higher compensating for the drop in exports due to sanctions.": {},
+                "capital controls: the russian central bank enacted capital controls that stabilized the ruble's value after it plunged following the invasion of ukraine.": {},
+                "collapse in imports: trade sanctions limited russia's ability to import goods reducing demand for foreign currency and strengthening the ruble.": {},
+                "rise in current account inflows: russia's all-time high current account inflows boost the value of the ruble as it creates demand for the currency.": {},
+                "economic fallout: despite economic difficulties faced by russia after defaulting on foreign debts the ruble's recovery is supported by various factors including high commodity prices and capital controls.": {}
+            },
+            "Decrease": {
+                "falling revenue from oil and natural gas due to lower global prices and domestic production cuts.": {},
+                "increased imports which lead to selling of rubles for foreign currency like dollars or euros lowering the ruble's exchange rate.": {},
+                "shrinking trade surplus previously supported by high oil prices and plummeting imports after invading ukraine.": {},
+                "central bank policies such as raising interest rates to discourage selling of rubles for foreign currency.": {},
+                "economic sanctions and restrictions on moving money out of the country limiting the ruble's recovery potential.": {}
+            }
+        }
+    },
+    "South African Rand": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The currency is expected to benefit from the market's realization that the dollar is overvalued, and investors are willing to take on more risk in developing countries. However, any pullback in risk from global markets could still cause the Rand to depreciate significantly.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "experience fluctuations",
+                "explanation": "The South African Rand is expected to end 2024 in a better place compared to the dollar, but the sailing is not likely to be smooth. The rand will likely benefit from the market\u2019s realisation that the dollar is overvalued. However, any pullback in risk from global markets pushes the Rand significantly lower as seen during the apartheid era sanctions. The currency looks to benefit when investors are willing to take on more risk in developing countries.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The USDZAR increased 0.0077 or 0.04% to 18.4456 on Tuesday July 30 from 18.4379 in the previous trading session. The South African Rand is expected to trade at 18.46 by the end of this quarter, according to Trading Economics global macro models and analysts expectations. Looking forward, we estimate it to trade at 19.73 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The South African Rand is expected to trade at 18.46 by the end of this quarter, according to Trading Economics global macro models and analysts expectations. Looking forward, we estimate it to trade at 19.73 in 12 months time.",
+                "explanation": "The South African Rand is expected to benefit from the market's realization that the US dollar is overvalued, which should lead to improved capital flows to emerging markets and a stronger rand.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "experience fluctuations",
+                "explanation": "The South African Rand is likely to benefit from the market's realization that the dollar is overvalued. However, it may also be affected by any pullback in risk from global markets, as seen during the apartheid era sanctions.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "economic indicators such as low inflation rates stable economic growth and high gdp contribute to a stronger currency value.": {},
+                "high demand for south african exports indicating a strong trade industry which positively impacts the rand's value.": {},
+                "lower supply of the rand in the market leading to an increase in its value.": {},
+                "rising interest rates which make investments in south africa more attractive and lead to increased demand for the rand.": {},
+                "positive economic policies implemented by the south african reserve bank (sarb) that promote financial stability and confidence in the currency.": {}
+            },
+            "Decrease": {
+                "global economic conditions and sentiment towards emerging markets": {},
+                "domestic economic problems such as electricity shortages and struggling manufacturing sector": {},
+                "current account deficit and foreign capital debt": {},
+                "market forces specifically supply and demand": {},
+                "rand's status within a flexible exchange rate regime": {}
+            }
+        }
+    },
+    "Mexican Peso": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "Analysts predict that the Mexican Peso will regain strength and recover from its recent decline, with forecasts estimating it to trade at 18.72 by the end of this quarter and at 19.87 in one year.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_1": {
+                "answer": "increase",
+                "explanation": "The statement is based on various factors such as the real interest rate in the US becoming positive, making peso-denominated assets less attractive, and market analysts predicting that the Mexican Peso will recover after its deep decline after the elections. Additionally, the consensus of analysts in a Citibanamex survey estimates that the Mexican peso will settle at $19.20 per dollar, which represents a potential depreciation of 8.10% from the May 18 quotation.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_2": {
+                "answer": "increase",
+                "explanation": "The context mentions that several market analysts believe the Mexican Peso will drift higher as firm fundamentals and a carry-trade advantage counteract the damage caused by the recent politically-driven volatility. Additionally, Rabobank forecasts the Mexican Peso to recover after its deep decline after the elections, with an expected value of 19.87 in 12 months time.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_3": {
+                "answer": "The Mexican Peso is expected to trade at 18.72 by the end of this quarter and at 19.87 in one year.",
+                "explanation": "Trading Economics global macro models and analysts expectations predict that the Mexican Peso will reach 18.72 by the end of this quarter and 19.87 in one year.",
+                "numeric": 0
+            },
+            "SentimentAnalysis_4": {
+                "answer": "regain some of its previous losses",
+                "explanation": "Analysts predict that the Mexican Peso will recover after its recent decline due to political factors. The recovery is supported by firm fundamentals and a carry-trade advantage, which should counteract the damage caused by volatility.",
+                "numeric": 0
+            }
+        },
+        "factors": {
+            "Increase": {
+                "strong trade balance: an increase in mexico's exports particularly to the united states can lead to a positive trade balance and strengthen the peso.": {},
+                "rising oil prices: as one of the largest oil producers higher global oil prices benefit mexico's economy leading to increased revenues and a stronger peso.": {},
+                "higher interest rates: attracting foreign investors by offering higher interest rates can lead to an increased demand for the mexican peso causing its value to rise.": {},
+                "low inflation: lower inflation rates in mexico can help maintain the purchasing power of the peso and contribute to its appreciation.": {},
+                "positive economic growth: a strong mexican economy outperforming other major economies like the u.s. can cause the value of the peso to increase.": {}
+            },
+            "Decrease": {
+                "u.s. economic performance relative to mexico": {},
+                "inflation levels in both countries": {},
+                "central bank intervention from the bdem and the fed": {},
+                "global economic conditions such as recessions in the u.s. canada and europe": {},
+                "commodity prices and their impact on other currencies": {}
+            }
+        }
+    }
+}
