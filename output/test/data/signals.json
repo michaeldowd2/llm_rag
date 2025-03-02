@@ -1,0 +1,30 @@
+{
+    "Crude Oil": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Decrease",
+                "explanation": "The context mentions that Crude Oil has decreased by 1.96 USD/BBL since the beginning of 2025, and it is expected to trade at 70.28 USD/BBL by the end of this quarter. Additionally, analysts expect the price to decrease further in the next two years, with an average of 71.87 in 12 months time. The potential for prices to exceed the current forecast is related to unplanned production disruptions, which could lead to a realignment of the oil price with its fundamental level."
+            }
+        },
+        "factors": {
+            "Increase": {
+                "Decreased production/increased demand": {},
+                "Geopolitical tensions/supply disruptions": {}
+            }
+        }
+    },
+    "Natural Gas": {
+        "sentiments": {
+            "SentimentAnalysis_0": {
+                "answer": "Increase",
+                "explanation": "The context mentions that natural gas has increased by 5.53% since the beginning of 2025, and it is expected to trade at 4.15 in 12 months time. Additionally, historical data shows a high of 15.78 in December of 2005, indicating that there is room for further increase. The context also mentions a cooling trend in 10-15 days which may cap significant upside moves but overall the trend seems to be positive."
+            }
+        },
+        "factors": {
+            "Increase": {
+                "Decreased supply due to reduced production export constraints or infrastructure limitations": {},
+                "Increased demand from economic growth winter weather conditions or increased consumption by commercial and industrial sectors": {}
+            }
+        }
+    }
+}

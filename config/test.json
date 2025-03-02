@@ -1,8 +1,8 @@
 {
     "subjects": ["Crude Oil","Natural Gas"],
     "directions": ["Increase"],
-    "no_links":5,
-    "no_factors":5,
+    "no_links":2,
+    "no_factors":2,
     "queries":{
         "sentiment_store": "SentimentStore_0",
         "sentiment_analysis": [
